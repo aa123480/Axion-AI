@@ -643,25 +643,25 @@
 <body>
   <!-- LANDING PAGE -->
   <div class="landing-page" id="landingPage">
-    <div class="logo-container">
-      <div class="logo">AXION AI</div>
-      <div class="logo-sub">Game Coach & Stats</div>
-    </div>
-
-    <div class="signin-container">
-      <div class="signin-container">
-  <h3 class="signin-title">Welcome</h3>
-  <p class="signin-subtitle">Sign in with Google to continue</p>
-
-  <!-- Google Sign-In config -->
-  <div id="g_id_onload"
-       data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+  <div class="logo-container">
+    <div class="logo" style="font-size: 90px;">AXION AI</div>
+    <div class="logo-sub">Game Coach & Stats</div>
   </div>
 
-  <!-- 👇 THIS is the actual button UI -->
-  <div id="googleSignInBtn" style="display:flex; justify-content:center;"></div>
+  <div class="signin-container">
+    <h3 class="signin-title">Welcome</h3>
+    <p class="signin-subtitle">Sign in with Google to continue</p>
+
+    <!-- Google config -->
+    <div id="g_id_onload"
+         data-client_id="45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+
+    <!-- Button renders HERE -->
+    <div id="googleSignInBtn" style="display:flex; justify-content:center;"></div>
+  </div>
 </div>
       <h3 class="signin-title">Welcome</h3>
       <p class="signin-subtitle">Sign in with Google to continue</p>
@@ -687,10 +687,10 @@
     </div>
 
     <div class="tabs-container">
-      <button class="tab-btn active" onclick="switchTab('home')">Home</button>
-      <button class="tab-btn" onclick="switchTab('chatbot')">Game ChatBot</button>
-      <button class="tab-btn" onclick="switchTab('kd')">K/D Generator</button>
-      <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
+      <button class="tab-btn active" onclick="switchTab('home', this)">Home</button>
+      <button class="tab-btn" onclick="switchTab('chatbot', this)">Game ChatBot</button>
+      <button class="tab-btn" onclick="switchTab('kd', this)">K/D Generator</button>
+      <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
     </div>
 
     <div class="content-area">
@@ -837,13 +837,13 @@
       }
     }
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    function switchTab(tabName, el) {
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
-      document.getElementById(tabName + '-tab').classList.add('active');
-      event.target.classList.add('active');
-    }
+  document.getElementById(tabName + '-tab').classList.add('active');
+  el.classList.add('active');
+}
 
     function changeTheme(theme) {
       localStorage.setItem('theme', theme);
@@ -901,27 +901,22 @@
       }
     }
     window.onload = function () {
-  // Check if user already logged in
   const user = localStorage.getItem('user');
   if (user) {
     showDashboard(JSON.parse(user));
   }
 
-  // Initialize Google Sign-In
   google.accounts.id.initialize({
     client_id: "45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com",
     callback: handleCredentialResponse
   });
 
-  // Render button
   google.accounts.id.renderButton(
     document.getElementById("googleSignInBtn"),
     {
       theme: "outline",
       size: "large",
-      width: 280,
-      text: "signin_with",
-      shape: "rectangular"
+      width: 300
     }
   );
 };
