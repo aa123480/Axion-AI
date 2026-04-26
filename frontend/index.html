@@ -855,7 +855,12 @@
       }
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/stats", {
+        // Use relative path for Vercel, localhost for local testing
+        const apiUrl = window.location.hostname === 'localhost' 
+          ? "http://127.0.0.1:8000/api/stats" 
+          : "/api/stats";
+        
+        const res = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
