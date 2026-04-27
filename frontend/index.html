@@ -5,53 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Axion AI - Game Coach</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <!-- Google Fonts: Lora (Logo), Inter (Labels), Crimson Text (Body) -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     :root {
-      /* Navy & Light Blue Theme */
-      --bg-primary: #1a3a52;
-      --bg-secondary: #2c3e50;
-      --text-primary: #e0f2ff;
-      --text-secondary: #64b5f6;
-      --card-bg: rgba(255, 255, 255, 0.95);
-      --card-text: #2c3e50;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      color: var(--card-text);
-      min-height: 100vh;
-      transition: all 0.3s ease;
+      --bg-primary: #0f2436;
+      --bg-secondary: #17344b;
+      --bg-tertiary: rgba(255, 255, 255, 0.08);
+      --surface: rgba(248, 251, 255, 0.98);
+      --surface-strong: #ffffff;
+      --surface-muted: #f2f6fb;
+      --text-primary: #e7f2ff;
+      --text-secondary: #8bbff2;
+      --text-dark: #183147;
+      --text-muted: #61788d;
+      --border-soft: rgba(255, 255, 255, 0.12);
+      --border-card: rgba(24, 49, 71, 0.09);
+      --accent: #69b1f3;
+      --accent-strong: #4295e8;
+      --button-bg: linear-gradient(135deg, #69b1f3 0%, #4295e8 100%);
+      --button-color: #ffffff;
+      --button-shadow: 0 14px 28px rgba(66, 149, 232, 0.25);
+      --chip-bg: rgba(105, 177, 243, 0.12);
+      --chip-color: #3f8ddc;
+      --hero-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      --card-shadow: 0 18px 48px rgba(15, 36, 54, 0.12);
+      --chat-user: #4a9cec;
+      --chat-ai: #eef4fa;
+      --danger: #c83d3d;
     }
 
     body.theme-black-white {
-      --bg-primary: #000000;
-      --bg-secondary: #1a1a1a;
-      --text-primary: #ffffff;
-      --text-secondary: #cccccc;
+      --bg-primary: #050505;
+      --bg-secondary: #1b1b1b;
+      --bg-tertiary: rgba(255, 255, 255, 0.06);
+      --surface: rgba(255, 255, 255, 0.98);
+      --surface-strong: #ffffff;
+      --surface-muted: #f3f3f3;
+      --text-primary: #f5f5f5;
+      --text-secondary: #bcbcbc;
+      --text-dark: #141414;
+      --text-muted: #5b5b5b;
+      --border-soft: rgba(255, 255, 255, 0.11);
+      --border-card: rgba(0, 0, 0, 0.1);
+      --accent: #0f0f0f;
+      --accent-strong: #000000;
+      --button-bg: linear-gradient(135deg, #1c1c1c 0%, #000000 100%);
+      --button-color: #ffffff;
+      --button-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+      --chip-bg: rgba(0, 0, 0, 0.08);
+      --chip-color: #111111;
+      --hero-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+      --card-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --chat-user: #111111;
+      --chat-ai: #f1f1f1;
+      --danger: #b72020;
     }
 
-    /* Font Families */
-    .logo, .essay-title { font-family: 'Lora', serif; font-weight: 700; }
-    .nav-label, .interface-label { font-family: 'Inter', sans-serif; font-weight: 500; }
-    .body-text, .description { font-family: 'Crimson Text', serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    /* ===== LANDING PAGE ===== */
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 32%),
+        linear-gradient(160deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      color: var(--text-dark);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
     .landing-page {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
       min-height: 100vh;
-      padding: 40px 20px 28px;
+      padding: 48px 24px 30px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      align-items: center;
       position: relative;
       overflow: hidden;
     }
@@ -61,37 +109,754 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at top, rgba(255, 255, 255, 0.1), transparent 34%),
-        linear-gradient(180deg, rgba(10, 24, 38, 0.08), rgba(10, 24, 38, 0.32));
+        radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(2, 8, 14, 0.08), rgba(2, 8, 14, 0.28));
       pointer-events: none;
     }
 
-    .landing-page.hidden {
-      display: none;
-    }
-
-    .logo-container {
-      text-align: center;
-      margin-top: 10vh;
+    .landing-hero,
+    .signin-shell {
       position: relative;
       z-index: 1;
     }
 
-   .logo {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(84px, 12vw, 172px);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  padding-left: 0.12em;
+    .landing-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 18px;
+      padding-top: 4vh;
+    }
 
-  background: linear-gradient(135deg, #eef8ff 0%, #9fd0ff 52%, #5fa9f4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    .landing-logo {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(88px, 12vw, 186px);
+      letter-spacing: 0.14em;
+      padding-left: 0.14em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f2f8ff 0%, #a6d3ff 50%, #5caaf4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: var(--hero-shadow);
+      animation: logoDrop 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-  text-shadow: 0 24px 60px rgba(0,0,0,0.28);
+    .landing-tagline {
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-size: 12px;
+      font-weight: 600;
+      animation: fadeIn 1.4s ease 0.2s both;
+    }
 
-  animation: logoDrop 1.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
+    .landing-copy {
+      max-width: 640px;
+      color: rgba(231, 242, 255, 0.82);
+      font-size: 16px;
+      line-height: 1.8;
+      animation: fadeIn 1.4s ease 0.35s both;
+    }
+
+    .signin-shell {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .signin-container {
+      width: min(100%, 520px);
+      background: rgba(9, 15, 23, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+    }
+
+    .signin-title {
+      color: rgba(255, 255, 255, 0.96);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .signin-subtitle {
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    #googleSignInBtn {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .dashboard {
+      display: none;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .dashboard.active {
+      display: block;
+    }
+
+    .dashboard-shell {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .dashboard-header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 22px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      backdrop-filter: blur(16px);
+    }
+
+    .brand-mark {
+      justify-self: center;
+      text-align: center;
+    }
+
+    .brand-mark .brand-name {
+      font-family: "Playfair Display", serif;
+      color: var(--text-primary);
+      font-size: 34px;
+      letter-spacing: 0.18em;
+      padding-left: 0.18em;
+    }
+
+    .brand-mark .brand-sub {
+      color: rgba(231, 242, 255, 0.62);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .header-spacer {
+      min-height: 1px;
+    }
+
+    .user-info {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(145, 202, 255, 0.35), rgba(86, 164, 240, 0.92));
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .user-details {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .user-label {
+      color: rgba(231, 242, 255, 0.58);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+    }
+
+    .user-name {
+      color: var(--text-primary);
+      font-size: 17px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .ghost-button {
+      width: auto;
+      margin: 0;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .ghost-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .tabs-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      width: auto;
+      margin: 0;
+      padding: 11px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid transparent;
+      color: rgba(231, 242, 255, 0.65);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .tab-btn.active {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .content-area {
+      flex: 1;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
+
+    .panel-body {
+      padding: 28px;
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      color: var(--text-dark);
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .section-copy {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .home-hero {
+      padding: 38px 34px 28px;
+      background:
+        linear-gradient(135deg, rgba(18, 42, 62, 0.98), rgba(26, 67, 101, 0.95));
+      color: var(--text-primary);
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .home-hero-logo {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(48px, 6vw, 88px);
+      letter-spacing: 0.16em;
+      padding-left: 0.16em;
+      margin-bottom: 12px;
+    }
+
+    .home-hero-sub {
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: rgba(231, 242, 255, 0.68);
+      font-size: 11px;
+      margin-bottom: 18px;
+    }
+
+    .home-hero-copy {
+      max-width: 760px;
+      margin: 0 auto;
+      color: rgba(231, 242, 255, 0.88);
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 24px;
+      padding: 28px;
+    }
+
+    .overview-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card,
+    .feature-card,
+    .insight-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+    }
+
+    .stat-card {
+      padding: 18px;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      color: var(--text-dark);
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-note {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .feature-card {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(24, 49, 71, 0.08);
+      border-color: rgba(66, 149, 232, 0.2);
+    }
+
+    .feature-kicker,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--chip-bg);
+      color: var(--chip-color);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .feature-name {
+      color: var(--text-dark);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .feature-description {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .insight-card {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      height: 100%;
+    }
+
+    .insight-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .insight-row {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(24, 49, 71, 0.08);
+    }
+
+    .insight-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .insight-row h3 {
+      color: var(--text-dark);
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .insight-row p {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .chat-layout,
+    .kd-layout,
+    .settings-layout {
+      display: grid;
+      gap: 22px;
+    }
+
+    .chat-panel {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 680px;
+    }
+
+    .chat-top {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid rgba(24, 49, 71, 0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      background: linear-gradient(180deg, rgba(242, 246, 251, 0.8), rgba(255, 255, 255, 0));
+    }
+
+    .chat-status {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .chat-messages {
+      padding: 22px 28px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(242, 246, 251, 0.8));
+    }
+
+    .message {
+      display: flex;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message-bubble {
+      max-width: min(680px, 78%);
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .message.user .message-bubble {
+      background: var(--chat-user);
+      color: #ffffff;
+      border-bottom-right-radius: 6px;
+    }
+
+    .message.ai .message-bubble {
+      background: var(--chat-ai);
+      color: var(--text-dark);
+      border: 1px solid rgba(24, 49, 71, 0.06);
+      border-bottom-left-radius: 6px;
+    }
+
+    .chat-input-area {
+      padding: 18px 22px 22px;
+      border-top: 1px solid rgba(24, 49, 71, 0.08);
+      display: grid;
+      gap: 14px;
+      background: var(--surface-strong);
+    }
+
+    .chat-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field,
+    .textarea {
+      width: 100%;
+      background: var(--surface-muted);
+      border: 1px solid rgba(24, 49, 71, 0.1);
+      color: var(--text-dark);
+      border-radius: 14px;
+      padding: 14px 15px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .textarea {
+      min-height: 120px;
+      resize: vertical;
+      font: inherit;
+      line-height: 1.7;
+    }
+
+    .field:focus,
+    .textarea:focus {
+      outline: none;
+      border-color: rgba(66, 149, 232, 0.4);
+      box-shadow: 0 0 0 4px rgba(66, 149, 232, 0.12);
+      background: #ffffff;
+    }
+
+    .primary-button {
+      width: auto;
+      margin: 0;
+      padding: 14px 20px;
+      border-radius: 14px;
+      background: var(--button-bg);
+      color: var(--button-color);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      box-shadow: var(--button-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary-button:disabled {
+      cursor: wait;
+      opacity: 0.72;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .secondary-button {
+      width: auto;
+      margin: 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--surface-muted);
+      color: var(--text-dark);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .chat-note,
+    .form-hint {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .kd-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .form-panel,
+    .result-panel {
+      padding: 26px;
+    }
+
+    .form-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .field-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field-label {
+      color: var(--text-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .result-surface {
+      background: var(--surface-muted);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 100%;
+      white-space: pre-wrap;
+      color: var(--text-dark);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .settings-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .settings-card {
+      padding: 24px;
+    }
+
+    .settings-title {
+      font-family: "Playfair Display", serif;
+      color: var(--text-dark);
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .settings-copy {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .theme-options {
+      display: grid;
+      gap: 14px;
+    }
+
+    .theme-card {
+      padding: 18px;
+      border: 1px solid rgba(24, 49, 71, 0.1);
+      border-radius: 16px;
+      background: var(--surface-strong);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .theme-card:hover,
+    .theme-card.active {
+      border-color: rgba(66, 149, 232, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .theme-preview {
+      height: 78px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .theme-preview.navy-light-blue {
+      background: linear-gradient(135deg, #0f2436 0%, #1d4766 100%);
+    }
+
+    .theme-preview.black-white {
+      background: linear-gradient(135deg, #000000 0%, #4f4f4f 100%);
+    }
+
+    .theme-name {
+      color: var(--text-dark);
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .theme-copy {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .danger-zone {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(200, 61, 61, 0.18);
+      background: rgba(200, 61, 61, 0.05);
+    }
+
+    .danger-title {
+      color: var(--danger);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .danger-copy {
+      color: #754040;
+      font-size: 13px;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .danger-button {
+      background: linear-gradient(135deg, #d54949 0%, #b92727 100%);
+      color: #ffffff;
+    }
 
     @keyframes logoDrop {
       0% {
@@ -108,18 +873,7 @@
       }
     }
 
-    .logo-sub {
-      font-size: 14px;
-      color: var(--text-secondary);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      margin-top: 16px;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      animation: fadeInSoft 1.4s ease 0.25s both;
-    }
-
-    @keyframes fadeInSoft {
+    @keyframes fadeIn {
       from {
         opacity: 0;
         transform: translateY(12px);
@@ -130,1007 +884,590 @@
       }
     }
 
-    .signin-container {
-      background: rgba(13, 20, 29, 0.92);
-      padding: 18px 22px;
-      border-radius: 0;
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
-      width: 100%;
-      max-width: 460px;
-      animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
-    }
-
-    @keyframes slideUp {
-      0% {
+    @keyframes fadeInUp {
+      from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(24px);
       }
-      100% {
+      to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    .signin-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.96);
-      margin-bottom: 0;
-      text-align: center;
-      font-family: 'Inter', sans-serif;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .signin-subtitle {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.62);
-      text-align: center;
-      margin-bottom: 0;
-      font-family: 'Inter', sans-serif;
-    }
-
-    #g_id_onload {
-      display: flex;
-      justify-content: center;
-    }
-
-    #googleSignInBtn {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    /* ===== DASHBOARD ===== */
-    .dashboard {
-      display: none;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .dashboard.active {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding: 16px 20px;
-      max-width: 1400px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-      background: rgba(8, 18, 29, 0.22);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      backdrop-filter: blur(14px);
-    }
-
-    .header-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      letter-spacing: 0.18em;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
-      min-width: 0;
-    }
-
-    .user-avatar {
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(145, 202, 255, 0.32), rgba(86, 164, 240, 0.92));
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 18px;
-  font-weight: 700;
-  color: white;
-
-  line-height: 1;
-  flex-shrink: 0;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-}
-
-    .user-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .user-details {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      gap: 2px;
-    }
-
-    .user-label {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(224, 242, 255, 0.56);
-    }
-
-    .user-name {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .logout-btn {
-      width: auto;
-      margin: 0 0 0 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(148, 207, 255, 0.38);
-      color: var(--text-primary);
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-    }
-
-    .logout-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: none;
-      transform: translateY(-1px);
-    }
-
-    .tabs-container {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 30px;
-      padding: 0 20px;
-      max-width: 1400px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 20px;
-      overflow-x: auto;
-    }
-
-    .tab-btn {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
-      padding: 8px 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-bottom: 2px solid transparent;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
-    }
-
-    .tab-btn.active {
-      color: var(--text-primary);
-      border-bottom-color: var(--text-secondary);
-    }
-
-    .tab-btn:hover {
-      color: var(--text-primary);
-    }
-
-    .tab-btn {
-      border-radius: 6px 6px 0 0;
-    }
-
-    .tab-btn.active {
-        background: rgba(255,255,255,0.08);
-      }
-    .content-area {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 20px;
-      flex: 1;
-    }
-
-    /* ===== TAB CONTENT ===== */
-    .tab-content {
-      display: none;
-      width: 100%;
-      max-width: 600px;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .card {
-      background: var(--card-bg);
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      width: 100%;
-    }
-
-    .card h2 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--card-text);
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
-      font-family: 'Lora', serif;
-    }
-
-    .card p {
-      font-family: 'Crimson Text', serif;
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--card-text);
-      margin-bottom: 20px;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    input {
-      background: #f8f9fa;
-      border: 1px solid #e0e0e0;
-      padding: 12px 14px;
-      border-radius: 8px;
-      color: var(--card-text);
-      font-size: 14px;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-    }
-
-    input::placeholder {
-      color: #999;
-    }
-
-    input:focus {
-      outline: none;
-      background: #ffffff;
-      border-color: var(--text-secondary);
-      box-shadow: 0 0 8px rgba(100, 181, 246, 0.2);
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, var(--text-secondary) 0%, #42a5f5 100%);
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      margin-bottom: 24px;
-      font-family: 'Inter', sans-serif;
-      letter-spacing: 0.5px;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(100, 181, 246, 0.4);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .output {
-      background: #f8f9fa;
-      padding: 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      white-space: pre-wrap;
-      line-height: 1.6;
-      color: var(--card-text);
-      min-height: 80px;
-      border: 1px solid #e0e0e0;
-      font-family: 'Crimson Text', serif;
-    }
-
-    /* ===== HOME TAB ===== */
-    .welcome-section {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .welcome-title {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--card-text);
-      margin-bottom: 16px;
-      font-family: 'Lora', serif;
-    }
-
-    .welcome-description {
-      font-family: 'Crimson Text', serif;
-      font-size: 16px;
-      color: #666;
-      line-height: 1.8;
-      margin-bottom: 24px;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .feature-card {
-      background: linear-gradient(180deg, #ffffff 0%, #f5f8fb 100%);
-      padding: 20px;
-      border-radius: 10px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(44, 62, 80, 0.08);
-      min-height: 148px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .feature-card:hover {
-      background: #ffffff;
-      border-color: var(--text-secondary);
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(26, 58, 82, 0.08);
-    }
-
-    .feature-kicker {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-
-    .feature-name {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      color: var(--card-text);
-      font-size: 17px;
-      margin-bottom: 10px;
-    }
-
-    .feature-description {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      line-height: 1.6;
-      color: #5f6f7e;
-    }
-
-    /* ===== CHATBOX TAB ===== */
-    .chatbox-container {
-      display: flex;
-      flex-direction: column;
-      height: 600px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-    }
-
-    .chat-header {
-      background: linear-gradient(135deg, var(--text-secondary) 0%, #42a5f5 100%);
-      color: #ffffff;
-      padding: 16px;
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .message {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .message.user {
-      justify-content: flex-end;
-    }
-
-    .message-bubble {
-      max-width: 70%;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1.5;
-      font-family: 'Crimson Text', serif;
-    }
-
-    .message.user .message-bubble {
-      background: var(--text-secondary);
-      color: white;
-      border-radius: 8px 2px 8px 8px;
-    }
-
-    .message.ai .message-bubble {
-      background: #f0f0f0;
-      color: var(--card-text);
-      border-radius: 2px 8px 8px 8px;
-    }
-
-    .chat-input-area {
-      padding: 16px;
-      border-top: 1px solid #e0e0e0;
-      display: flex;
-      gap: 8px;
-    }
-
-    .chat-input-area input {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      font-size: 13px;
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .chat-send-btn {
-      padding: 10px 16px;
-      background: var(--text-secondary);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-    }
-
-    .chat-send-btn:hover {
-      background: #42a5f5;
-    }
-
-    /* ===== SETTINGS TAB ===== */
-    .settings-section {
-      margin-bottom: 32px;
-    }
-
-    .settings-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--card-text);
-      margin-bottom: 16px;
-      font-family: 'Lora', serif;
-      border-bottom: 2px solid #e0e0e0;
-      padding-bottom: 10px;
-    }
-
-    .theme-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .theme-card {
-      padding: 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .theme-card.active {
-      border-color: var(--text-secondary);
-      background: rgba(100, 181, 246, 0.1);
-    }
-
-    .theme-card:hover {
-      border-color: var(--text-secondary);
-    }
-
-    .theme-preview {
-      width: 100%;
-      height: 60px;
-      border-radius: 6px;
-      margin-bottom: 12px;
-    }
-
-    .theme-preview.navy-light-blue {
-      background: linear-gradient(135deg, #1a3a52 0%, #2c3e50 100%);
-    }
-
-    .theme-preview.black-white {
-      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-    }
-
-    .theme-name {
-      font-weight: 700;
-      color: var(--card-text);
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .danger-zone {
-      background: #fef2f2;
-      padding: 16px;
-      border-radius: 8px;
-      border: 1px solid #fca5a5;
-      margin-top: 20px;
-    }
-
-    .danger-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #991b1b;
-      margin-bottom: 12px;
-      font-family: 'Lora', serif;
-    }
-
-    .danger-btn {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin-top: 8px;
-    }
-
-    .danger-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-    }
-
-    @media (max-width: 600px) {
-      .logo {
-        font-size: clamp(56px, 18vw, 96px);
-        letter-spacing: 0.08em;
-      }
-
-      .signin-container {
-        max-width: 100%;
-        padding: 16px 18px;
+    @media (max-width: 1080px) {
+      .home-grid,
+      .kd-grid,
+      .settings-layout {
+        grid-template-columns: 1fr;
       }
 
       .dashboard-header {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+      .header-spacer {
+        display: none;
       }
 
       .user-info {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
+        justify-self: center;
       }
 
-      .logout-btn {
-        margin-left: 0;
+      .brand-mark {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .landing-page,
+      .dashboard {
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
-      .tabs-container {
-        flex-wrap: wrap;
+      .landing-logo {
+        font-size: clamp(62px, 18vw, 118px);
+        letter-spacing: 0.09em;
+        padding-left: 0.09em;
       }
 
-      .chatbox-container {
-        height: 500px;
+      .stats-strip,
+      .feature-grid,
+      .chat-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .home-hero,
+      .panel-body,
+      .form-panel,
+      .result-panel,
+      .settings-card,
+      .chat-top,
+      .chat-messages,
+      .chat-input-area {
+        padding-left: 18px;
+        padding-right: 18px;
       }
 
       .message-bubble {
-        max-width: 85%;
+        max-width: 100%;
       }
 
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .theme-options {
-        grid-template-columns: 1fr;
+      .user-info {
+        flex-wrap: wrap;
+        justify-content: center;
       }
     }
   </style>
 </head>
-
 <body>
-  <!-- LANDING PAGE -->
   <div class="landing-page" id="landingPage">
-  <div class="logo-container">
-    <div class="logo">AXION AI</div>
-    <div class="logo-sub">Game Coach & Stats</div>
-  </div>
-
-  <div class="signin-container">
-    <h3 class="signin-title">Sign In With Google</h3>
-    <p class="signin-subtitle">Secure access to your coaching dashboard</p>
-
-    <div id="g_id_onload"
-         data-client_id="45894833624-..."
-         data-callback="handleCredentialResponse">
+    <div class="landing-hero">
+      <div class="landing-logo">AXION AI</div>
+      <div class="landing-tagline">Game Coach and Stats</div>
+      <p class="landing-copy">
+        A focused coaching workspace for competitive players. Review performance, ask for strategy support,
+        and keep your training workflow in one place.
+      </p>
     </div>
 
-    <div id="googleSignInBtn"></div>
+    <div class="signin-shell">
+      <div class="signin-container">
+        <h3 class="signin-title">Sign In With Google</h3>
+        <p class="signin-subtitle">Secure access to your coaching dashboard</p>
+        <div id="g_id_onload"
+             data-client_id="45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        <div id="googleSignInBtn"></div>
+      </div>
+    </div>
   </div>
-</div>
 
-  <!-- DASHBOARD -->
   <div class="dashboard" id="dashboard">
-    <div class="dashboard-header">
-      <h1 class="header-title">AXION AI</h1>
-      <div class="user-info">
-        <div class="user-avatar" id="userAvatar">A</div>
-        <div class="user-details">
-          <div class="user-label">Account</div>
-          <div class="user-name" id="userName">User</div>
+    <div class="dashboard-shell">
+      <header class="dashboard-header">
+        <div class="header-spacer"></div>
+        <div class="brand-mark">
+          <div class="brand-name">AXION AI</div>
+          <div class="brand-sub">Game Coach and Stats</div>
         </div>
-        <button class="logout-btn" onclick="logout()">Sign Out</button>
-      </div>
-    </div>
-
-    <div class="tabs-container">
-      <button class="tab-btn active" onclick="switchTab('home', this)">Home</button>
-      <button class="tab-btn" onclick="switchTab('chatbot', this)">Game ChatBot</button>
-      <button class="tab-btn" onclick="switchTab('kd', this)">K/D Generator</button>
-      <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
-    </div>
-
-    <div class="content-area">
-      <!-- HOME TAB -->
-      <div class="tab-content active" id="home-tab">
-        <div class="card">
-          <div class="welcome-section">
-            <h2 class="welcome-title">Welcome Back</h2>
-            <p class="welcome-description body-text">
-              Elevate your gaming skills with personalized coaching, real-time stats analysis, and AI-powered strategies. Track your performance and join thousands of competitive gamers improving their game.
-            </p>
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">A</div>
+          <div class="user-details">
+            <div class="user-label">Account</div>
+            <div class="user-name" id="userName">User</div>
           </div>
-
-          <div class="feature-grid">
-            <div class="feature-card" onclick="switchTab('kd')">
-              <div class="feature-kicker">Performance</div>
-              <div class="feature-name">K/D Stats</div>
-              <div class="feature-description">Review match efficiency, compare accuracy, and generate sharper coaching feedback.</div>
-            </div>
-            <div class="feature-card" onclick="switchTab('chatbot')">
-              <div class="feature-kicker">Strategy</div>
-              <div class="feature-name">AI ChatBot</div>
-              <div class="feature-description">Ask focused questions about aiming, positioning, pacing, and competitive decision-making.</div>
-            </div>
-            <div class="feature-card" onclick="switchTab('settings')">
-              <div class="feature-kicker">Workspace</div>
-              <div class="feature-name">Settings</div>
-              <div class="feature-description">Refine theme preferences and keep your profile environment clean and consistent.</div>
-            </div>
-            <div class="feature-card">
-              <div class="feature-kicker">Guidance</div>
-              <div class="feature-name">Pro Insights</div>
-              <div class="feature-description">Browse practical improvement cues built around disciplined practice and match review.</div>
-            </div>
-          </div>
+          <button class="ghost-button" onclick="logout()">Sign Out</button>
         </div>
-      </div>
+      </header>
 
-      <!-- CHATBOT TAB -->
-      <div class="tab-content" id="chatbot-tab">
-        <div class="chatbox-container">
-          <div class="chat-header">Game Intelligence Chat</div>
-          <div class="chat-messages" id="chatMessages">
-            <div class="message ai">
-              <div class="message-bubble">Welcome back. Ask about game strategy, mechanics, or performance improvement and I will help you work through it.</div>
-            </div>
-          </div>
-          <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Ask about games, strategies, tips..." onkeypress="handleChatKeypress(event)">
-            <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
-          </div>
-        </div>
-      </div>
+      <nav class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('home', this)">Home</button>
+        <button class="tab-btn" onclick="switchTab('chatbot', this)">Game ChatBot</button>
+        <button class="tab-btn" onclick="switchTab('kd', this)">K/D Generator</button>
+        <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
+      </nav>
 
-      <!-- K/D GENERATOR TAB -->
-      <div class="tab-content" id="kd-tab">
-        <div class="card">
-          <h2>Performance Stats</h2>
-
-          <div class="input-group">
-            <input id="kills" type="number" placeholder="Kills" min="0">
-            <input id="deaths" type="number" placeholder="Deaths" min="0">
-            <input id="accuracy" type="number" placeholder="Accuracy %" min="0" max="100">
-          </div>
-
-          <button onclick="analyzeStats()">Analyze</button>
-
-          <div class="output" id="output">Enter your stats above to get personalized coaching feedback</div>
-        </div>
-      </div>
-
-      <!-- SETTINGS TAB -->
-      <div class="tab-content" id="settings-tab">
-        <div class="card">
-          <h2>Settings</h2>
-
-          <div class="settings-section">
-            <div class="settings-title">Color Theme</div>
-            <div class="theme-options">
-              <div class="theme-card active" onclick="changeTheme('navy-light-blue')" id="theme-navy">
-                <div class="theme-preview navy-light-blue"></div>
-                <div class="theme-name">Navy & Light Blue</div>
-              </div>
-              <div class="theme-card" onclick="changeTheme('black-white')" id="theme-black">
-                <div class="theme-preview black-white"></div>
-                <div class="theme-name">Black & White</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-section">
-            <div class="settings-title">Account</div>
-            <button onclick="logout()" style="margin-bottom: 12px;">Sign Out</button>
-            
-            <div class="danger-zone">
-              <div class="danger-title">Danger Zone</div>
-              <p style="font-family: 'Crimson Text', serif; font-size: 13px; color: #7f1d1d; margin-bottom: 12px;">
-                Permanently delete your account and all associated data. This action cannot be undone.
+      <main class="content-area">
+        <section class="tab-content active" id="home-tab">
+          <div class="panel">
+            <div class="home-hero">
+              <div class="home-hero-logo">AXION AI</div>
+              <div class="home-hero-sub">Performance Coaching Workspace</div>
+              <p class="home-hero-copy">
+                A cleaner, faster way to review your numbers, ask better questions, and build a repeatable
+                improvement loop around the games you care about.
               </p>
-              <button class="danger-btn" onclick="deleteAccount()">Delete Account</button>
+            </div>
+            <div class="home-grid">
+              <div class="overview-stack">
+                <div class="stats-strip">
+                  <div class="stat-card">
+                    <div class="stat-label">Focus</div>
+                    <div class="stat-value">Decision-Making</div>
+                    <div class="stat-note">Use the chatbot for round planning, pacing, and role-specific questions.</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">Review</div>
+                    <div class="stat-value">Stat Analysis</div>
+                    <div class="stat-note">Break down K/D and accuracy with coaching feedback that is easier to act on.</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">Workflow</div>
+                    <div class="stat-value">One Surface</div>
+                    <div class="stat-note">Keep conversation, performance input, and settings aligned in one product view.</div>
+                  </div>
+                </div>
+
+                <div class="feature-grid">
+                  <div class="feature-card" onclick="switchTab('kd')">
+                    <div class="feature-kicker">Performance</div>
+                    <div class="feature-name">K/D Stats</div>
+                    <div class="feature-description">Review match efficiency, compare accuracy, and generate sharper coaching feedback.</div>
+                  </div>
+                  <div class="feature-card" onclick="switchTab('chatbot')">
+                    <div class="feature-kicker">Strategy</div>
+                    <div class="feature-name">AI ChatBot</div>
+                    <div class="feature-description">Ask focused questions about aiming, positioning, pacing, and competitive decision-making.</div>
+                  </div>
+                  <div class="feature-card" onclick="switchTab('settings')">
+                    <div class="feature-kicker">Workspace</div>
+                    <div class="feature-name">Settings</div>
+                    <div class="feature-description">Switch themes and keep the interface tuned to the way you want to work.</div>
+                  </div>
+                  <div class="feature-card">
+                    <div class="feature-kicker">Guidance</div>
+                    <div class="feature-name">Practice Structure</div>
+                    <div class="feature-description">Use your data and chat prompts together so each session has a clear training objective.</div>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="insight-card">
+                <div>
+                  <div class="chip">Home Overview</div>
+                  <h2 class="section-title" style="font-size: 26px; margin-top: 12px;">A more focused coaching interface</h2>
+                </div>
+                <div class="insight-list">
+                  <div class="insight-row">
+                    <h3>Use the stat review before asking for advice</h3>
+                    <p>Running your numbers first gives the chatbot more grounded context for practical follow-up questions.</p>
+                  </div>
+                  <div class="insight-row">
+                    <h3>Keep questions specific</h3>
+                    <p>Agent choice, role, map control, economy, and positioning usually produce stronger responses than broad prompts.</p>
+                  </div>
+                  <div class="insight-row">
+                    <h3>Use themes intentionally</h3>
+                    <p>The black and white mode is designed to feel truly monochrome, including action buttons and active states.</p>
+                  </div>
+                </div>
+              </aside>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+
+        <section class="tab-content" id="chatbot-tab">
+          <div class="panel chat-panel">
+            <div class="chat-top">
+              <div>
+                <div class="chip">Live AI</div>
+                <h2 class="section-title" style="margin-top: 12px;">Game Intelligence Chat</h2>
+                <p class="section-copy">
+                  Ask for strategy, mechanical improvement, role-specific advice, or help reviewing a recent performance.
+                </p>
+              </div>
+              <div class="chat-status" id="chatStatus">
+                Connected to the coaching backend.<br>
+                Answers are generated from the server, not hardcoded.
+              </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+              <div class="message ai">
+                <div class="message-bubble">Welcome back. Ask about game strategy, mechanics, or performance improvement and I will help you work through it.</div>
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <textarea class="textarea" id="chatInput" placeholder="Example: I main controller in Valorant and my aim is decent, but I lose too many post-plant rounds. What should I review first?"></textarea>
+              <div class="chat-controls">
+                <div class="chat-note">
+                  The assistant works best when you include the game, your role, what is going wrong, and what outcome you want.
+                </div>
+                <button class="primary-button" id="chatSendBtn" onclick="sendChatMessage()">Send Message</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-content" id="kd-tab">
+          <div class="kd-layout">
+            <div class="panel panel-body">
+              <div class="chip">Performance Review</div>
+              <h2 class="section-title" style="margin-top: 14px;">K/D Generator</h2>
+              <p class="section-copy">
+                Enter a match snapshot and get a cleaner coaching summary with a K/D ratio, performance score, and targeted notes.
+              </p>
+            </div>
+
+            <div class="kd-grid">
+              <div class="panel form-panel">
+                <div class="form-stack">
+                  <div class="field-group">
+                    <label class="field-label" for="kills">Kills</label>
+                    <input class="field" id="kills" type="number" placeholder="18" min="0">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="deaths">Deaths</label>
+                    <input class="field" id="deaths" type="number" placeholder="11" min="0">
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="accuracy">Accuracy Percentage</label>
+                    <input class="field" id="accuracy" type="number" placeholder="43" min="0" max="100">
+                  </div>
+                  <div class="form-hint">
+                    Accuracy should be entered as a whole percentage from 0 to 100.
+                  </div>
+                  <button class="primary-button" onclick="analyzeStats()">Analyze Performance</button>
+                </div>
+              </div>
+
+              <div class="panel result-panel">
+                <div class="chip">Result</div>
+                <h2 class="section-title" style="font-size: 24px; margin-top: 14px;">Coaching Output</h2>
+                <div class="result-surface" id="output">Enter your stats to generate a performance summary.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-content" id="settings-tab">
+          <div class="settings-layout">
+            <div class="panel settings-card">
+              <div class="chip">Appearance</div>
+              <h2 class="settings-title" style="margin-top: 14px;">Theme</h2>
+              <p class="settings-copy">
+                Choose between the default navy interface and a true black-and-white mode with matching button states and accents.
+              </p>
+
+              <div class="theme-options">
+                <div class="theme-card active" onclick="changeTheme('navy-light-blue')" id="theme-navy">
+                  <div class="theme-preview navy-light-blue"></div>
+                  <div class="theme-name">Navy and Light Blue</div>
+                  <div class="theme-copy">Deep blue surfaces, cool highlights, and a softer interface contrast.</div>
+                </div>
+                <div class="theme-card" onclick="changeTheme('black-white')" id="theme-black">
+                  <div class="theme-preview black-white"></div>
+                  <div class="theme-name">Black and White</div>
+                  <div class="theme-copy">Monochrome surfaces and genuinely neutral button treatment across the product.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel settings-card">
+              <div class="chip">Account</div>
+              <h2 class="settings-title" style="margin-top: 14px;">Session Controls</h2>
+              <p class="settings-copy">
+                Manage your active session, or remove local account data from this browser.
+              </p>
+
+              <button class="primary-button" onclick="logout()">Sign Out</button>
+
+              <div class="danger-zone">
+                <div class="danger-title">Danger Zone</div>
+                <p class="danger-copy">
+                  Permanently clear your stored account data from this browser. This does not delete your Google account itself.
+                </p>
+                <button class="primary-button danger-button" onclick="deleteAccount()">Delete Local Account Data</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
 
   <script>
-    // Google Sign-In Handler
+    const appState = {
+      user: null,
+      theme: "navy-light-blue",
+      chatHistory: [
+        {
+          role: "assistant",
+          content: "Welcome back. Ask about game strategy, mechanics, or performance improvement and I will help you work through it."
+        }
+      ],
+      chatPending: false
+    };
+
+    const $ = (id) => document.getElementById(id);
+
     function handleCredentialResponse(response) {
       const jwt = response.credential;
-      const base64Url = jwt.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      
+      const base64Url = jwt.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(atob(base64).split("").map((char) => {
+        return "%" + ("00" + char.charCodeAt(0).toString(16)).slice(-2);
+      }).join(""));
+
       const userData = JSON.parse(jsonPayload);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem("user", JSON.stringify(userData));
       showDashboard(userData);
     }
 
-   function showDashboard(userData) {
-  document.getElementById('landingPage').style.display = 'none';
-  document.getElementById('dashboard').classList.add('active');
+    function showDashboard(userData) {
+      appState.user = userData;
+      $("landingPage").classList.add("hidden");
+      $("dashboard").classList.add("active");
 
-  document.getElementById('userName').textContent = userData.name || 'User';
-  const avatar = document.getElementById('userAvatar');
-  if (userData.picture) {
-    avatar.innerHTML = '<img src="' + userData.picture + '" alt="Profile photo">';
-  } else {
-    avatar.textContent = (userData.name || 'U')[0].toUpperCase();
-  }
+      $("userName").textContent = userData.name || "User";
 
-  const savedTheme = localStorage.getItem('theme') || 'navy-light-blue';
-  changeTheme(savedTheme);
-}
+      const avatar = $("userAvatar");
+      if (userData.picture) {
+        avatar.innerHTML = `<img src="${userData.picture}" alt="Profile photo">`;
+      } else {
+        avatar.textContent = (userData.name || "U")[0].toUpperCase();
+      }
 
-function logout() {
-  localStorage.removeItem('user');
+      const savedTheme = localStorage.getItem("theme") || "navy-light-blue";
+      changeTheme(savedTheme);
+      renderChatMessages();
+    }
 
-  document.getElementById('dashboard').classList.remove('active');
-  document.getElementById('landingPage').style.display = 'flex';
+    function logout() {
+      localStorage.removeItem("user");
+      appState.user = null;
+      appState.chatHistory = [
+        {
+          role: "assistant",
+          content: "Welcome back. Ask about game strategy, mechanics, or performance improvement and I will help you work through it."
+        }
+      ];
 
-  document.getElementById('chatMessages').innerHTML =
-    '<div class="message ai"><div class="message-bubble">Welcome back. Ask about game strategy, mechanics, or performance improvement and I will help you work through it.</div></div>';
-
-  document.getElementById('kills').value = '';
-  document.getElementById('deaths').value = '';
-  document.getElementById('accuracy').value = '';
-}
+      $("dashboard").classList.remove("active");
+      $("landingPage").classList.remove("hidden");
+      $("kills").value = "";
+      $("deaths").value = "";
+      $("accuracy").value = "";
+      $("output").textContent = "Enter your stats to generate a performance summary.";
+      $("chatInput").value = "";
+      setChatStatus("Connected to the coaching backend.\nAnswers are generated from the server, not hardcoded.");
+      renderChatMessages();
+    }
 
     function deleteAccount() {
-      if (confirm('Are you absolutely sure? This will permanently delete your account and cannot be undone.')) {
+      if (confirm("Are you absolutely sure? This will clear your local account data from this browser.")) {
         localStorage.clear();
         location.reload();
       }
     }
 
-    function switchTab(tabName, el) {
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    function switchTab(tabName, trigger) {
+      document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach((button) => button.classList.remove("active"));
+      $(`${tabName}-tab`).classList.add("active");
 
-  document.getElementById(tabName + '-tab').classList.add('active');
-  el.classList.add('active');
-}
-
-    function changeTheme(theme) {
-      localStorage.setItem('theme', theme);
-      document.body.classList.remove('theme-navy-light-blue', 'theme-black-white');
-      
-      document.getElementById('theme-navy').classList.remove('active');
-      document.getElementById('theme-black').classList.remove('active');
-      
-      if (theme === 'navy-light-blue') {
-        document.body.classList.add('theme-navy-light-blue');
-        document.getElementById('theme-navy').classList.add('active');
-      } else if (theme === 'black-white') {
-        document.body.classList.add('theme-black-white');
-        document.getElementById('theme-black').classList.add('active');
+      if (trigger && trigger.classList) {
+        trigger.classList.add("active");
+      } else {
+        document.querySelectorAll(".tab-btn").forEach((button) => {
+          if (button.textContent.toLowerCase().includes(tabName === "chatbot" ? "chatbot" : tabName)) {
+            button.classList.add("active");
+          }
+        });
       }
     }
 
-    // Stats Analyzer
-    async function analyzeStats() {
-      const kills = document.getElementById("kills").value;
-      const deaths = document.getElementById("deaths").value;
-      const accuracy = document.getElementById("accuracy").value;
+    function changeTheme(theme) {
+      appState.theme = theme;
+      localStorage.setItem("theme", theme);
+      document.body.classList.remove("theme-black-white");
 
-      if (!kills || !deaths || !accuracy) {
-        document.getElementById("output").innerText = "Please fill in all fields";
+      $("theme-navy").classList.remove("active");
+      $("theme-black").classList.remove("active");
+
+      if (theme === "black-white") {
+        document.body.classList.add("theme-black-white");
+        $("theme-black").classList.add("active");
+      } else {
+        $("theme-navy").classList.add("active");
+      }
+    }
+
+    async function analyzeStats() {
+      const kills = Number($("kills").value);
+      const deaths = Number($("deaths").value);
+      const accuracy = Number($("accuracy").value);
+
+      if (!Number.isFinite(kills) || !Number.isFinite(deaths) || !Number.isFinite(accuracy)) {
+        $("output").textContent = "Please complete all three fields before running the analysis.";
         return;
       }
 
       try {
-        // Use relative path for Vercel, localhost for local testing
-        const apiUrl = window.location.hostname === 'localhost'
-          ? "http://127.0.0.1:8000/stats"
-          : "/api/stats";
-        
-        const res = await fetch(apiUrl, {
+        const response = await fetch("/api/stats", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ kills, deaths, accuracy })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Unable to analyze stats right now.");
+        }
+
+        $("output").textContent = [
+          `K/D Ratio: ${data.kd_ratio}`,
+          `Performance Score: ${data.performance_score}`,
+          "",
+          "Coaching Feedback:",
+          ...data.coach_feedback
+        ].join("\n");
+      } catch (error) {
+        $("output").textContent = error.message || "Unable to analyze stats right now.";
+      }
+    }
+
+    function renderChatMessages() {
+      const messagesEl = $("chatMessages");
+      messagesEl.innerHTML = appState.chatHistory.map((message) => {
+        const safeText = escapeHtml(message.content);
+        const roleClass = message.role === "user" ? "user" : "ai";
+        return `<div class="message ${roleClass}"><div class="message-bubble">${safeText}</div></div>`;
+      }).join("");
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function setChatStatus(text) {
+      $("chatStatus").innerHTML = escapeHtml(text).replace(/\n/g, "<br>");
+    }
+
+    async function sendChatMessage() {
+      if (appState.chatPending) {
+        return;
+      }
+
+      const input = $("chatInput");
+      const message = input.value.trim();
+
+      if (!message) {
+        return;
+      }
+
+      appState.chatHistory.push({ role: "user", content: message });
+      input.value = "";
+      renderChatMessages();
+
+      appState.chatPending = true;
+      $("chatSendBtn").disabled = true;
+      $("chatSendBtn").textContent = "Thinking...";
+      setChatStatus("Generating a live coaching response.\nThe assistant is using the backend AI route.");
+
+      try {
+        const response = await fetch("/api/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            kills: Number(kills),
-            deaths: Number(deaths),
-            accuracy: Number(accuracy)
+            messages: appState.chatHistory.slice(-10)
           })
         });
 
-        const data = await res.json();
+        const data = await response.json();
 
-        document.getElementById("output").innerText =
-          "K/D Ratio: " + data.kd_ratio + "\n" +
-          "Performance Score: " + data.performance_score + "\n\n" +
-          "Coaching Feedback:\n" + data.coach_feedback.join("\n");
-      } catch (error) {
-        document.getElementById("output").innerText = "Error connecting to server. Make sure the backend is running.";
-      }
-    }
-    window.onload = function () {
-  const user = localStorage.getItem('user');
-  if (user) {
-    showDashboard(JSON.parse(user));
-  }
-
-  google.accounts.id.initialize({
-    client_id: "45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com",
-    callback: handleCredentialResponse
-  });
-
-  google.accounts.id.renderButton(
-    document.getElementById("googleSignInBtn"),
-    {
-      theme: "filled_black",
-      size: "large",
-      shape: "rectangular",
-      text: "signin_with",
-      logo_alignment: "center",
-      width: 416
-    }
-  );
-};
-
-    // Chat Functionality
-    const gameResponses = {
-      "fps": "FPS games require quick reflexes, good crosshair placement, and map awareness. Focus on pre-aiming common spots!",
-      "aim": "Improve your aim by practicing aim trainers, adjusting mouse sensitivity, and playing deathmatch modes regularly.",
-      "strategy": "Good strategy involves map control, team communication, and adapting to opponent playstyles. Study pro players!",
-      "moba": "MOBA games need positioning, farm efficiency, and team coordination. Focus on one role and master it.",
-      "valorant": "In Valorant, practice your agents, economy management, and site execution. Communication with teammates is key!",
-      "cs2": "CS2 success needs spray control, positioning, economy knowledge, and team plays. Demo review is crucial.",
-      "ranking": "To climb ranks, focus on consistency, watch replays, learn from mistakes, and play with a team.",
-      "sensitivity": "Find a sensitivity that's comfortable for your playstyle. Lower sens = better precision, higher sens = quicker reactions.",
-      "routine": "Practice for 1-2 hours daily focusing on aim trainers, then play competitively. Rest is important too!",
-      "default": "That's an interesting question! Tell me more about what aspect of gaming you'd like to improve."
-    };
-
-    function sendChatMessage() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
-
-      if (!message) return;
-
-      addChatMessage(message, 'user');
-      input.value = '';
-
-      setTimeout(() => {
-        const response = getGameResponse(message);
-        addChatMessage(response, 'ai');
-      }, 400);
-    }
-
-    function handleChatKeypress(event) {
-      if (event.key === 'Enter') {
-        sendChatMessage();
-      }
-    }
-
-    function addChatMessage(text, sender) {
-      const messagesDiv = document.getElementById('chatMessages');
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message ${sender}`;
-      
-      const bubble = document.createElement('div');
-      bubble.className = 'message-bubble';
-      bubble.textContent = text;
-      
-      messageDiv.appendChild(bubble);
-      messagesDiv.appendChild(messageDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-
-    function getGameResponse(userMessage) {
-      const lowerMessage = userMessage.toLowerCase();
-      
-      for (const [keyword, response] of Object.entries(gameResponses)) {
-        if (lowerMessage.includes(keyword)) {
-          return response;
+        if (!response.ok) {
+          throw new Error(data.detail || "The chatbot is unavailable right now.");
         }
+
+        appState.chatHistory.push({
+          role: "assistant",
+          content: data.reply
+        });
+        renderChatMessages();
+        setChatStatus("Connected to the coaching backend.\nAnswers are generated from the server, not hardcoded.");
+      } catch (error) {
+        appState.chatHistory.push({
+          role: "assistant",
+          content: error.message || "The chatbot is unavailable right now."
+        });
+        renderChatMessages();
+        setChatStatus("The chat request failed.\nCheck the backend configuration or API key.");
+      } finally {
+        appState.chatPending = false;
+        $("chatSendBtn").disabled = false;
+        $("chatSendBtn").textContent = "Send Message";
       }
-      
-      return gameResponses.default;
     }
 
-    // Check if user is already logged in
-    window.addEventListener('load', () => {
-      const user = localStorage.getItem('user');
-      if (user) {
-        showDashboard(JSON.parse(user));
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    window.addEventListener("load", () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        showDashboard(JSON.parse(storedUser));
+      } else {
+        const savedTheme = localStorage.getItem("theme") || "navy-light-blue";
+        changeTheme(savedTheme);
       }
+
+      google.accounts.id.initialize({
+        client_id: "45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+
+      google.accounts.id.renderButton(
+        $("googleSignInBtn"),
+        {
+          theme: "filled_black",
+          size: "large",
+          shape: "rectangular",
+          text: "signin_with",
+          logo_alignment: "center",
+          width: 440
+        }
+      );
+
+      $("chatInput").addEventListener("keydown", (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+          sendChatMessage();
+        }
+      });
     });
   </script>
 </body>
-
 </html>
