@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import os
 
 app = FastAPI()
 
@@ -17,8 +20,17 @@ class Stats(BaseModel):
     deaths: int
     accuracy: float
 
+# Serve static files from public folder
+public_path = os.path.join(os.path.dirname(__file__), '..', 'public')
+if os.path.exists(public_path):
+    app.mount("/static", StaticFiles(directory=public_path), name="static")
+
 @app.get("/")
-def home():
+async def root():
+    """Serve index.html from public folder"""
+    index_path = os.path.join(public_path, 'index.html')
+    if os.path.exists(index_path):
+        return FileResponse(index_path, media_type="text/html")
     return {"message": "AI Game Coach is running"}
 
 @app.get("/api")
