@@ -430,58 +430,13 @@
       line-height: 1.85;
     }
 
-    .home-grid {
+    .home-minimal {
+      padding: 30px 28px;
       display: grid;
-      grid-template-columns: 1.3fr 0.9fr;
-      gap: 24px;
-      padding: 28px;
+      gap: 22px;
     }
 
-    .overview-stack {
-      display: grid;
-      gap: 18px;
-    }
-
-    .stats-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .stat-card,
-    .feature-card,
-    .insight-card {
-      background: var(--surface-strong);
-      border: 1px solid var(--border-card);
-      border-radius: 16px;
-    }
-
-    .stat-card {
-      padding: 18px;
-    }
-
-    .stat-label {
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 10px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .stat-value {
-      color: var(--text-dark);
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .stat-note {
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
+    .minimal-actions,
     .feature-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -489,6 +444,9 @@
     }
 
     .feature-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -531,39 +489,14 @@
       line-height: 1.7;
     }
 
-    .insight-card {
-      padding: 22px;
-      display: grid;
-      gap: 18px;
-      align-content: start;
-      height: 100%;
-    }
-
-    .insight-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .insight-row {
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(24, 49, 71, 0.08);
-    }
-
-    .insight-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .insight-row h3 {
-      color: var(--text-dark);
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-
-    .insight-row p {
+    .minimal-note {
+      padding: 18px 20px;
+      background: var(--surface-muted);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      border-radius: 16px;
       color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.7;
+      font-size: 14px;
+      line-height: 1.75;
     }
 
     .chat-layout,
@@ -896,7 +829,6 @@
     }
 
     @media (max-width: 1080px) {
-      .home-grid,
       .kd-grid,
       .settings-layout {
         grid-template-columns: 1fr;
@@ -933,7 +865,7 @@
         padding-left: 0.09em;
       }
 
-      .stats-strip,
+      .minimal-actions,
       .feature-grid,
       .chat-controls {
         grid-template-columns: 1fr;
@@ -1018,74 +950,25 @@
               <div class="home-hero-logo">AXION AI</div>
               <div class="home-hero-sub">Performance Coaching Workspace</div>
               <p class="home-hero-copy">
-                A cleaner, faster way to review your numbers, ask better questions, and build a repeatable
-                improvement loop around the games you care about.
+                Review your numbers, ask better questions, and keep your improvement workflow focused.
               </p>
             </div>
-            <div class="home-grid">
-              <div class="overview-stack">
-                <div class="stats-strip">
-                  <div class="stat-card">
-                    <div class="stat-label">Focus</div>
-                    <div class="stat-value">Decision-Making</div>
-                    <div class="stat-note">Use the chatbot for round planning, pacing, and role-specific questions.</div>
-                  </div>
-                  <div class="stat-card">
-                    <div class="stat-label">Review</div>
-                    <div class="stat-value">Stat Analysis</div>
-                    <div class="stat-note">Break down K/D and accuracy with coaching feedback that is easier to act on.</div>
-                  </div>
-                  <div class="stat-card">
-                    <div class="stat-label">Workflow</div>
-                    <div class="stat-value">One Surface</div>
-                    <div class="stat-note">Keep conversation, performance input, and settings aligned in one product view.</div>
-                  </div>
+            <div class="home-minimal">
+              <div class="minimal-actions">
+                <div class="feature-card" onclick="switchTab('kd')">
+                  <div class="feature-kicker">Performance</div>
+                  <div class="feature-name">K/D Stats</div>
+                  <div class="feature-description">Run a quick match review and get targeted coaching feedback.</div>
                 </div>
-
-                <div class="feature-grid">
-                  <div class="feature-card" onclick="switchTab('kd')">
-                    <div class="feature-kicker">Performance</div>
-                    <div class="feature-name">K/D Stats</div>
-                    <div class="feature-description">Review match efficiency, compare accuracy, and generate sharper coaching feedback.</div>
-                  </div>
-                  <div class="feature-card" onclick="switchTab('chatbot')">
-                    <div class="feature-kicker">Strategy</div>
-                    <div class="feature-name">AI ChatBot</div>
-                    <div class="feature-description">Ask focused questions about aiming, positioning, pacing, and competitive decision-making.</div>
-                  </div>
-                  <div class="feature-card" onclick="switchTab('settings')">
-                    <div class="feature-kicker">Workspace</div>
-                    <div class="feature-name">Settings</div>
-                    <div class="feature-description">Switch themes and keep the interface tuned to the way you want to work.</div>
-                  </div>
-                  <div class="feature-card">
-                    <div class="feature-kicker">Guidance</div>
-                    <div class="feature-name">Practice Structure</div>
-                    <div class="feature-description">Use your data and chat prompts together so each session has a clear training objective.</div>
-                  </div>
+                <div class="feature-card" onclick="switchTab('chatbot')">
+                  <div class="feature-kicker">Strategy</div>
+                  <div class="feature-name">AI ChatBot</div>
+                  <div class="feature-description">Ask focused questions about gameplay, positioning, pacing, and review.</div>
                 </div>
               </div>
-
-              <aside class="insight-card">
-                <div>
-                  <div class="chip">Home Overview</div>
-                  <h2 class="section-title" style="font-size: 26px; margin-top: 12px;">A more focused coaching interface</h2>
-                </div>
-                <div class="insight-list">
-                  <div class="insight-row">
-                    <h3>Use the stat review before asking for advice</h3>
-                    <p>Running your numbers first gives the chatbot more grounded context for practical follow-up questions.</p>
-                  </div>
-                  <div class="insight-row">
-                    <h3>Keep questions specific</h3>
-                    <p>Agent choice, role, map control, economy, and positioning usually produce stronger responses than broad prompts.</p>
-                  </div>
-                  <div class="insight-row">
-                    <h3>Use themes intentionally</h3>
-                    <p>The black and white mode is designed to feel truly monochrome, including action buttons and active states.</p>
-                  </div>
-                </div>
-              </aside>
+              <div class="minimal-note">
+                Start with your recent match stats, then move into chat for a more specific follow-up. Keeping both steps together usually produces stronger coaching.
+              </div>
             </div>
           </div>
         </section>
@@ -1215,6 +1098,7 @@
     const appState = {
       user: null,
       theme: "navy-light-blue",
+      chatConfigured: true,
       chatHistory: [
         {
           role: "assistant",
@@ -1369,6 +1253,22 @@
       $("chatStatus").innerHTML = escapeHtml(text).replace(/\n/g, "<br>");
     }
 
+    async function checkChatAvailability() {
+      try {
+        const response = await fetch("/api/health");
+        const data = await response.json();
+        appState.chatConfigured = Boolean(data.chat_configured);
+      } catch (error) {
+        appState.chatConfigured = false;
+      }
+
+      if (appState.chatConfigured) {
+        setChatStatus("Connected to the coaching backend.\nAnswers are generated from the server.");
+      } else {
+        setChatStatus("AI setup needed.\nAdd OPENAI_API_KEY in Vercel project environment variables.");
+      }
+    }
+
     async function sendChatMessage() {
       if (appState.chatPending) {
         return;
@@ -1378,6 +1278,18 @@
       const message = input.value.trim();
 
       if (!message) {
+        return;
+      }
+
+      if (!appState.chatConfigured) {
+        appState.chatHistory.push({ role: "user", content: message });
+        appState.chatHistory.push({
+          role: "assistant",
+          content: "AI is not configured on the server yet. Add OPENAI_API_KEY to your Vercel project environment variables, redeploy, and the live chatbot will start working."
+        });
+        input.value = "";
+        renderChatMessages();
+        setChatStatus("AI setup needed.\nAdd OPENAI_API_KEY in Vercel project environment variables.");
         return;
       }
 
@@ -1412,14 +1324,19 @@
           content: data.reply
         });
         renderChatMessages();
-        setChatStatus("Connected to the coaching backend.\nAnswers are generated from the server, not hardcoded.");
+        setChatStatus("Connected to the coaching backend.\nAnswers are generated from the server.");
       } catch (error) {
         appState.chatHistory.push({
           role: "assistant",
           content: error.message || "The chatbot is unavailable right now."
         });
         renderChatMessages();
-        setChatStatus("The chat request failed.\nCheck the backend configuration or API key.");
+        if ((error.message || "").includes("OPENAI_API_KEY")) {
+          appState.chatConfigured = false;
+          setChatStatus("AI setup needed.\nAdd OPENAI_API_KEY in Vercel project environment variables.");
+        } else {
+          setChatStatus("The chat request failed.\nCheck the backend configuration.");
+        }
       } finally {
         appState.chatPending = false;
         $("chatSendBtn").disabled = false;
@@ -1467,6 +1384,8 @@
           sendChatMessage();
         }
       });
+
+      checkChatAvailability();
     });
   </script>
 </body>
