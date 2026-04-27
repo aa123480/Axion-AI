@@ -1,8 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".",
-  "installCommand": "pip install -r requirements.txt",
+  "public": true,
   "builds": [
     {
       "src": "api/index.py",
@@ -14,16 +12,16 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/api/.*",
       "dest": "api/index.py"
     },
     {
-      "src": "/frontend/(.*)",
-      "dest": "frontend/$1"
+      "src": "/(.+)",
+      "dest": "public/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "frontend/index.html"
+      "src": "/",
+      "dest": "public/index.html"
     }
   ]
 }
