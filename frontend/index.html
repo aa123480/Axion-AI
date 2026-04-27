@@ -62,19 +62,19 @@
       text-align: center;
     }
 
-    .logo {
-  font-size: 88px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  color: var(--text-primary);
-
-  .logo {
+   .logo {
   font-family: 'Playfair Display', serif;
-}
+  font-size: 92px;
+  font-weight: 700;
+  letter-spacing: 6px;
 
-  text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  background: linear-gradient(135deg, #e0f2ff, #64b5f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
-  animation: dropIn 0.9s ease;
+  text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+
+  animation: dropIn 0.8s ease;
 }
 
     @keyframes dropIn {
@@ -181,8 +181,8 @@
     }
 
     .user-avatar {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--text-secondary);
 
@@ -194,8 +194,7 @@
   font-weight: 700;
   color: white;
 
-  line-height: 1;
-  flex-shrink: 0;
+  line-height: 1; /* FIX */
 }
 
     .logout-btn {
@@ -661,7 +660,7 @@
   <!-- LANDING PAGE -->
   <div class="landing-page" id="landingPage">
   <div class="logo-container">
-    <div class="logo" style="font-size: 90px;">AXION AI</div>
+    <div class="logo">AXION AI</div>
     <div class="logo-sub">Game Coach & Stats</div>
   </div>
 
@@ -669,28 +668,14 @@
     <h3 class="signin-title">Welcome</h3>
     <p class="signin-subtitle">Sign in with Google to continue</p>
 
-    <!-- Google config -->
     <div id="g_id_onload"
-         data-client_id="45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
+         data-client_id="45894833624-..."
+         data-callback="handleCredentialResponse">
     </div>
 
-    <!-- Button renders HERE -->
-    <div id="googleSignInBtn" style="display:flex; justify-content:center;"></div>
+    <div id="googleSignInBtn"></div>
   </div>
 </div>
-      <h3 class="signin-title">Welcome</h3>
-      <p class="signin-subtitle">Sign in with Google to continue</p>
-      <div id="g_id_onload"
-     data-client_id="45894833624-6lud3j9dnp2t9a20qq1ah0ll3rurq8kg.apps.googleusercontent.com"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
-
-<div id="googleSignInBtn"></div>
-    </div>
-  </div>
 
   <!-- DASHBOARD -->
   <div class="dashboard" id="dashboard">
@@ -826,30 +811,31 @@
       showDashboard(userData);
     }
 
-    function showDashboard(userData) {
-  document.getElementById('landingPage').style.display = 'none'; // stronger than class
+   function showDashboard(userData) {
+  document.getElementById('landingPage').style.display = 'none';
   document.getElementById('dashboard').classList.add('active');
 
   document.getElementById('userName').textContent = userData.name || 'User';
   document.getElementById('userAvatar').textContent =
     (userData.name || 'U')[0].toUpperCase();
-}
-      // Load saved theme
-      const savedTheme = localStorage.getItem('theme') || 'navy-light-blue';
-      changeTheme(savedTheme);
-    }
 
-    function logout() {
+  const savedTheme = localStorage.getItem('theme') || 'navy-light-blue';
+  changeTheme(savedTheme);
+}
+
+function logout() {
   localStorage.removeItem('user');
 
   document.getElementById('dashboard').classList.remove('active');
   document.getElementById('landingPage').style.display = 'flex';
+
+  document.getElementById('chatMessages').innerHTML =
+    '<div class="message ai"><div class="message-bubble">Hi! Ask me anything about gaming 🎮</div></div>';
+
+  document.getElementById('kills').value = '';
+  document.getElementById('deaths').value = '';
+  document.getElementById('accuracy').value = '';
 }
-      document.getElementById('chatMessages').innerHTML = '<div class="message ai"><div class="message-bubble">Hi! Ask me anything about gaming, strategies, or game tips. I\'m here to help! 🎮</div></div>';
-      document.getElementById('kills').value = '';
-      document.getElementById('deaths').value = '';
-      document.getElementById('accuracy').value = '';
-    }
 
     function deleteAccount() {
       if (confirm('Are you absolutely sure? This will permanently delete your account and cannot be undone.')) {

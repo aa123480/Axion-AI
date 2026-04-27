@@ -21,7 +21,11 @@ class Stats(BaseModel):
 def home():
     return {"message": "AI Game Coach is running"}
 
-@app.post("/stats")
+@app.get("/api")
+def api_home():
+    return {"message": "API is working"}
+
+@app.post("/api/stats")
 def analyze_stats(stats: Stats):
     kills = stats.kills
     deaths = stats.deaths if stats.deaths > 0 else 1

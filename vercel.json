@@ -1,13 +1,15 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": ".",
+  "installCommand": "pip install -r requirements.txt",
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "frontend/index.html",
-      "use": "@vercel/static"
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.11"
+      }
     }
   ],
   "routes": [
@@ -16,9 +18,12 @@
       "dest": "api/index.py"
     },
     {
+      "src": "/frontend/(.*)",
+      "dest": "frontend/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "frontend/index.html"
     }
   ]
 }
-
