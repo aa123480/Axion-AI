@@ -90,7 +90,7 @@ def game_chat(request: ChatRequest):
     cleaned_messages = [
         {
             "role": message.role,
-            "content": [{"type": "input_text", "text": message.content.strip()}],
+            "content": message.content.strip(),
         }
         for message in request.messages
         if message.content.strip()
