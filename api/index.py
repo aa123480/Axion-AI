@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 import os
 
@@ -20,22 +19,32 @@ class Stats(BaseModel):
     deaths: int
     accuracy: float
 
-# Serve static files from public folder
+# Path to public folder
 public_path = os.path.join(os.path.dirname(__file__), '..', 'public')
-if os.path.exists(public_path):
-    app.mount("/static", StaticFiles(directory=public_path), name="static")
 
 @app.get("/")
 async def root():
-    """Serve index.html from public folder"""
+    """Serve index.html"""
     index_path = os.path.join(public_path, 'index.html')
     if os.path.exists(index_path):
-        return FileResponse(index_path, media_type="text/html")
+        with open(index_path, 'r', encoding='utf-8') as f:
+            return HTMLResponse(content=f.read())
     return {"message": "AI Game Coach is running"}
 
-@app.get("/api")
-def api_home():
-    return {"message": "API is working"}
+@app.get("/{path:path}")
+async def serve_file(path: str):
+    """Serve any file as fallback, otherwise return index.html"""
+    file_path = os.path.join(public_path, path)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return FileResponse(file_path)
+    
+    # Fallback to index.html for SPA routing
+    index_path = os.path.join(public_path, 'index.html')
+    if os.path.exists(index_path):
+        with open(index_path, 'r', encoding='utf-8') as f:
+            return HTMLResponse(content=f.read())
+    
+    return {"error": "Not found"}
 
 @app.post("/api/stats")
 def analyze_stats(stats: Stats):
