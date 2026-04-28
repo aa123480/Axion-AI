@@ -33,6 +33,23 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage]
 
 
+def normalize_chat_reply(text: str) -> str:
+    lines = [line.rstrip() for line in text.splitlines()]
+    cleaned = []
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("**") and stripped.endswith("**") and len(stripped) > 4:
+            cleaned.append(stripped.strip("*"))
+            continue
+        if stripped.startswith("* "):
+            cleaned.append("- " + stripped[2:])
+            continue
+        cleaned.append(line)
+
+    return "\n".join(cleaned).strip()
+
+
 def get_gemini_client() -> genai.Client:
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -112,7 +129,9 @@ def game_chat(request: ChatRequest):
                 "You are Axion AI, a precise and supportive game coach. "
                 "Give practical advice for competitive games. Be concise, structured, and specific. "
                 "When useful, break advice into immediate fixes, practice focus, and match habits. "
-                "Do not mention being an AI unless directly asked.\n\n"
+                "Do not mention being an AI unless directly asked. "
+                "Do not use markdown, bold markers, or asterisk bullets. "
+                "Use plain text with short paragraphs or simple dash bullets only when needed.\n\n"
                 f"{conversation}\n\nAssistant:"
             ),
         )
@@ -121,7 +140,7 @@ def game_chat(request: ChatRequest):
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Chat request failed: {exc}") from exc
 
-    reply = (response.text or "").strip()
+    reply = normalize_chat_reply((response.text or "").strip())
     if not reply:
         raise HTTPException(status_code=502, detail="The Gemini response was empty.")
 

@@ -501,6 +501,7 @@
 
     .chat-layout,
     .kd-layout,
+    .tracker-layout,
     .settings-layout {
       display: grid;
       gap: 22px;
@@ -658,6 +659,155 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 22px;
+    }
+
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.45fr;
+      gap: 22px;
+    }
+
+    .tracker-list,
+    .tracker-preview {
+      padding: 26px;
+    }
+
+    .tracker-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .tracker-item {
+      background: var(--surface-muted);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .tracker-item-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .tracker-game {
+      color: var(--text-dark);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .tracker-state {
+      color: var(--chip-color);
+      background: var(--chip-bg);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .tracker-copy {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .tracker-preview-surface {
+      background: var(--surface-muted);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      border-radius: 18px;
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .tracker-toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tracker-badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tracker-badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--surface-strong);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .tracker-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .tracker-stat {
+      background: var(--surface-strong);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      border-radius: 14px;
+      padding: 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .tracker-stat-label {
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .tracker-stat-value {
+      color: var(--text-dark);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .tracker-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .tracker-panel {
+      background: var(--surface-strong);
+      border: 1px solid rgba(24, 49, 71, 0.08);
+      border-radius: 14px;
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .tracker-panel h3 {
+      color: var(--text-dark);
+      font-size: 15px;
+    }
+
+    .tracker-panel p,
+    .tracker-panel li {
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .tracker-panel ul {
+      padding-left: 18px;
     }
 
     .form-panel,
@@ -830,6 +980,8 @@
 
     @media (max-width: 1080px) {
       .kd-grid,
+      .tracker-grid,
+      .tracker-panels,
       .settings-layout {
         grid-template-columns: 1fr;
       }
@@ -867,6 +1019,7 @@
 
       .minimal-actions,
       .feature-grid,
+      .tracker-stat-grid,
       .chat-controls {
         grid-template-columns: 1fr;
       }
@@ -940,6 +1093,7 @@
         <button class="tab-btn active" onclick="switchTab('home', this)">Home</button>
         <button class="tab-btn" onclick="switchTab('chatbot', this)">Game ChatBot</button>
         <button class="tab-btn" onclick="switchTab('kd', this)">K/D Generator</button>
+        <button class="tab-btn" onclick="switchTab('trackers', this)">Trackers</button>
         <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
       </nav>
 
@@ -1043,6 +1197,104 @@
                 <div class="chip">Result</div>
                 <h2 class="section-title" style="font-size: 24px; margin-top: 14px;">Coaching Output</h2>
                 <div class="result-surface" id="output">Enter your stats to generate a performance summary.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-content" id="trackers-tab">
+          <div class="tracker-layout">
+            <div class="panel panel-body">
+              <div class="chip">Multi-Game Stats</div>
+              <h2 class="section-title" style="margin-top: 14px;">Trackers</h2>
+              <p class="section-copy">
+                Yes, this can grow into a multi-game stats hub for titles like Valorant and Fortnite. This tab gives you the product surface for that direction while we keep the existing coach and K/D workflow intact.
+              </p>
+            </div>
+
+            <div class="tracker-grid">
+              <div class="panel tracker-list">
+                <div class="chip">Supported Directions</div>
+                <div class="tracker-stack">
+                  <div class="tracker-item">
+                    <div class="tracker-item-head">
+                      <div class="tracker-game">Valorant Tracker</div>
+                      <div class="tracker-state">Priority</div>
+                    </div>
+                    <div class="tracker-copy">
+                      Best fit for your current app. We can expand from K/D into ACS, headshot percentage, win rate, agent history, and match summaries.
+                    </div>
+                  </div>
+                  <div class="tracker-item">
+                    <div class="tracker-item-head">
+                      <div class="tracker-game">Fortnite Tracker</div>
+                      <div class="tracker-state">Ready</div>
+                    </div>
+                    <div class="tracker-copy">
+                      Good candidate for elimination totals, placement trends, win rate, and recent session performance.
+                    </div>
+                  </div>
+                  <div class="tracker-item">
+                    <div class="tracker-item-head">
+                      <div class="tracker-game">More Games</div>
+                      <div class="tracker-state">Expandable</div>
+                    </div>
+                    <div class="tracker-copy">
+                      The same tab can later support Apex, CS2, Rocket League, or any title where we can source stats reliably.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel tracker-preview">
+                <div class="tracker-preview-surface">
+                  <div class="tracker-toolbar">
+                    <div>
+                      <div class="chip">Preview Surface</div>
+                      <h2 class="section-title" style="font-size: 24px; margin-top: 12px;">Valorant Season Snapshot</h2>
+                    </div>
+                    <div class="tracker-badges">
+                      <div class="tracker-badge">Ranked</div>
+                      <div class="tracker-badge">Last 20 Matches</div>
+                      <div class="tracker-badge">Agent Split</div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-stat-grid">
+                    <div class="tracker-stat">
+                      <div class="tracker-stat-label">Win Rate</div>
+                      <div class="tracker-stat-value">58%</div>
+                    </div>
+                    <div class="tracker-stat">
+                      <div class="tracker-stat-label">K/D</div>
+                      <div class="tracker-stat-value">1.19</div>
+                    </div>
+                    <div class="tracker-stat">
+                      <div class="tracker-stat-label">Headshot %</div>
+                      <div class="tracker-stat-value">24</div>
+                    </div>
+                    <div class="tracker-stat">
+                      <div class="tracker-stat-label">Main Agent</div>
+                      <div class="tracker-stat-value">Omen</div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-panels">
+                    <div class="tracker-panel">
+                      <h3>What this tab can become</h3>
+                      <p>
+                        A searchable player tracker with per-game layouts, season summaries, recent form, and coaching hooks that feed directly into the AI tab.
+                      </p>
+                    </div>
+                    <div class="tracker-panel">
+                      <h3>Most useful first metrics</h3>
+                      <ul>
+                        <li>Valorant: rank, K/D, ADR or ACS, headshot rate, agent performance</li>
+                        <li>Fortnite: eliminations, win rate, placement average, recent matches</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1380,7 +1632,8 @@
       );
 
       $("chatInput").addEventListener("keydown", (event) => {
-        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
           sendChatMessage();
         }
       });
