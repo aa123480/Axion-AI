@@ -34,12 +34,13 @@ class ChatRequest(BaseModel):
 
 
 def get_gemini_client() -> genai.Client:
-    if not os.getenv("GEMINI_API_KEY"):
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
         raise HTTPException(
             status_code=503,
             detail="GEMINI_API_KEY is not configured on the server."
         )
-    return genai.Client()
+    return genai.Client(api_key=api_key)
 
 
 @app.get("/api/health")
