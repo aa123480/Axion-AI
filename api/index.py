@@ -3,7 +3,7 @@ from typing import Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
+from google import genai
 from pydantic import BaseModel
 
 
@@ -33,20 +33,20 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage]
 
 
-def get_openai_client() -> OpenAI:
-    if not os.getenv("OPENAI_API_KEY"):
+def get_gemini_client() -> genai.Client:
+    if not os.getenv("GEMINI_API_KEY"):
         raise HTTPException(
             status_code=503,
-            detail="OPENAI_API_KEY is not configured on the server."
+            detail="GEMINI_API_KEY is not configured on the server."
         )
-    return OpenAI()
+    return genai.Client()
 
 
 @app.get("/api/health")
 async def health_check():
     return {
         "status": "ok",
-        "chat_configured": bool(os.getenv("OPENAI_API_KEY"))
+        "chat_configured": bool(os.getenv("GEMINI_API_KEY"))
     }
 
 
@@ -100,25 +100,28 @@ def game_chat(request: ChatRequest):
         raise HTTPException(status_code=400, detail="At least one non-empty message is required.")
 
     try:
-        client = get_openai_client()
-        response = client.responses.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"),
-            instructions=(
+        client = get_gemini_client()
+        conversation = "\n\n".join(
+            f"{message['role'].title()}: {message['content']}"
+            for message in cleaned_messages
+        )
+        response = client.models.generate_content(
+            model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+            contents=(
                 "You are Axion AI, a precise and supportive game coach. "
                 "Give practical advice for competitive games. Be concise, structured, and specific. "
                 "When useful, break advice into immediate fixes, practice focus, and match habits. "
-                "Do not mention being an AI unless directly asked."
+                "Do not mention being an AI unless directly asked.\n\n"
+                f"{conversation}\n\nAssistant:"
             ),
-            input=cleaned_messages,
-            max_output_tokens=360,
         )
     except HTTPException:
         raise
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Chat request failed: {exc}") from exc
 
-    reply = (response.output_text or "").strip()
+    reply = (response.text or "").strip()
     if not reply:
-        raise HTTPException(status_code=502, detail="The AI response was empty.")
+        raise HTTPException(status_code=502, detail="The Gemini response was empty.")
 
     return {"reply": reply}

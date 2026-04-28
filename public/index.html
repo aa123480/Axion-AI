@@ -1265,7 +1265,7 @@
       if (appState.chatConfigured) {
         setChatStatus("Connected to the coaching backend.\nAnswers are generated from the server.");
       } else {
-        setChatStatus("AI setup needed.\nAdd OPENAI_API_KEY in Vercel project environment variables.");
+        setChatStatus("AI setup needed.\nAdd GEMINI_API_KEY in Vercel project environment variables.");
       }
     }
 
@@ -1285,11 +1285,11 @@
         appState.chatHistory.push({ role: "user", content: message });
         appState.chatHistory.push({
           role: "assistant",
-          content: "AI is not configured on the server yet. Add OPENAI_API_KEY to your Vercel project environment variables, redeploy, and the live chatbot will start working."
+          content: "AI is not configured on the server yet. Add GEMINI_API_KEY to your Vercel project environment variables, redeploy, and the live chatbot will start working."
         });
         input.value = "";
         renderChatMessages();
-        setChatStatus("AI setup needed.\nAdd OPENAI_API_KEY in Vercel project environment variables.");
+        setChatStatus("AI setup needed.\nAdd GEMINI_API_KEY in Vercel project environment variables.");
         return;
       }
 
@@ -1331,9 +1331,9 @@
           content: error.message || "The chatbot is unavailable right now."
         });
         renderChatMessages();
-        if ((error.message || "").includes("OPENAI_API_KEY")) {
+        if ((error.message || "").includes("GEMINI_API_KEY")) {
           appState.chatConfigured = false;
-          setChatStatus("AI setup needed.\nAdd OPENAI_API_KEY in Vercel project environment variables.");
+          setChatStatus("AI setup needed.\nAdd GEMINI_API_KEY in Vercel project environment variables.");
         } else {
           setChatStatus("The chat request failed.\nCheck the backend configuration.");
         }
