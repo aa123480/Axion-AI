@@ -1431,6 +1431,70 @@
   </div>
 
   <script>
+    async function fetchValorantStats() {
+  const username = $("valUsername").value.trim();
+  const tag = $("valTag").value.trim();
+  const errorEl = $("trackerError");
+
+  errorEl.style.display = "none";
+
+  if (!username || !tag) {
+    errorEl.textContent = "Please enter both a username and tag.";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  $("trackerPlayerName").textContent = "Loading...";
+  $("statRank").textContent = "—";
+  $("statRR").textContent = "—";
+  $("statElo").textContent = "—";
+  $("statPeak").textContent = "—";
+  $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>Fetching matches...</div>";
+
+  try {
+    // Fetch rank data
+    const accountRes = await fetch(`/api/tracker/valorant/${encodeURIComponent(username)}/${encodeURIComponent(tag)}`);
+    const accountData = await accountRes.json();
+
+    if (!accountRes.ok) {
+      throw new Error(accountData.detail || "Player not found.");
+    }
+
+    $("trackerPlayerName").textContent = `${accountData.username}#${accountData.tag}`;
+    $("statRank").textContent = accountData.rank || "Unranked";
+    $("statRR").textContent = `${accountData.rr} RR`;
+    $("statElo").textContent = accountData.elo;
+    $("statPeak").textContent = accountData.peak_rank || "N/A";
+
+    // Fetch match history
+    const matchRes = await fetch(`/api/tracker/valorant/${encodeURIComponent(username)}/${encodeURIComponent(tag)}/matches`);
+    const matchData = await matchRes.json();
+
+    if (!matchRes.ok || !matchData.matches || matchData.matches.length === 0) {
+      $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>No recent competitive matches found.</div>";
+      return;
+    }
+
+    $("matchHistory").innerHTML = matchData.matches.map(match => `
+      <div class="tracker-item">
+        <div class="tracker-item-head">
+          <div class="tracker-game" style="font-size: 14px;">${match.agent} — ${match.map}</div>
+          <div class="tracker-state" style="background: ${match.result === 'Win' ? 'rgba(50,200,100,0.15)' : 'rgba(200,61,61,0.15)'}; color: ${match.result === 'Win' ? '#2ecc71' : '#c83d3d'};">${match.result}</div>
+        </div>
+        <div class="tracker-copy">
+          ${match.kills}K / ${match.deaths}D / ${match.assists}A — KD: ${match.kd} — Headshots: ${match.headshots}
+        </div>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    errorEl.textContent = error.message || "Could not load stats. Try again.";
+    errorEl.style.display = "block";
+    $("trackerPlayerName").textContent = "Enter a username to load stats";
+    $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>No matches loaded yet.</div>";
+  }
+}
+    
     const appState = {
       user: null,
       theme: "navy-light-blue",
