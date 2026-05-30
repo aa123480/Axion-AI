@@ -1,2 +1,1 @@
-# AI Game Coach & Stats
-AI Game Coach project
+# Axion Ai - AI Game Coach and Stats
