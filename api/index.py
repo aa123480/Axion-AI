@@ -19,7 +19,7 @@ app.add_middleware(
 # ── Models ──────────────────────────────────────────────────────────────────
 
 class Stats(BaseModel):
-    kills: int
+    kills : int
     deaths: int
     accuracy: float
 

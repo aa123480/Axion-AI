@@ -137,6 +137,7 @@
       padding-left: 0.14em;
       font-weight: 700;
       background: linear-gradient(135deg, #f2f8ff 0%, #a6d3ff 50%, #5caaf4 100%);
+      background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: var(--hero-shadow);
@@ -1205,47 +1206,68 @@
         <section class="tab-content" id="trackers-tab">
           <div class="tracker-layout">
             <div class="panel panel-body">
-              <div class="chip">Multi-Game Stats</div>
+              <div class="chip">-Live Game Stats</div>
               <h2 class="section-title" style="margin-top: 14px;">Trackers</h2>
               <p class="section-copy">
-                Yes, this can grow into a multi-game stats hub for titles like Valorant and Fortnite. This tab gives you the product surface for that direction while we keep the existing coach and K/D workflow intact.
+                Enter your Valorant username and tag to retrieve your recent match stats, K/D, win rate, and agent performance.
               </p>
             </div>
 
             <div class="tracker-grid">
               <div class="panel tracker-list">
                 <div class="chip">Supported Directions</div>
-                <div class="tracker-stack">
-                  <div class="tracker-item">
-                    <div class="tracker-item-head">
-                      <div class="tracker-game">Valorant Tracker</div>
-                      <div class="tracker-state">Priority</div>
-                    </div>
-                    <div class="tracker-copy">
-                      Best fit for your current app. We can expand from K/D into ACS, headshot percentage, win rate, agent history, and match summaries.
+                <div class="tracker-stack"> style="margin-top: 18px;">
+                  <div class="field-group">
+                    <label class="field-label" for="valorantUsername">Valorant Username</label>
+                    <input class="field" id="valorantUsername" type="text" placeholder="Enter your Valorant username">
+                  </div>
+                <div class="field-group">
+                    <label class="field-label" for="valorantTag">Tag</label>
+                    <input class="field" id="valorantTag" type="text" placeholder="Enter your Valorant tag">
+                  </div>
+                    <button class="primary-button" onclick="fetchValorantStats()">Look Up Stats</button>
+                      <div id ="trackerError" class="form-hint" style="color: red; display: none;"></div>
                     </div>
                   </div>
-                  <div class="tracker-item">
-                    <div class="tracker-item-head">
-                      <div class="tracker-game">Fortnite Tracker</div>
-                      <div class="tracker-state">Ready</div>
+              <div class="panel tracker-preview">
+                <div class="tracker-preview-surface">
+                    <div class="tracker-toolbar">
+                      <div>
+                        <div class="chip">Valorant</div>
+                        <h2 class="section-title" style="font-size: 24px; margin-top: 12px;" id="trackerPlayerName">Enter a username to load stats</h2>
+                      <div>
                     </div>
-                    <div class="tracker-copy">
-                      Good candidate for elimination totals, placement trends, win rate, and recent session performance.
+                    <div class="tracker-stat-grid">
+                      <div class="tracker-stat">
+                        <div class="tracker-stat-label">Rank</div>
+                        <div class="tracker-stat-value" id="stateRR">-</div>
+                      </div>
+                      <div class="tracker-stat">
+                        <div class="tracker-stat-label">RR</div>
+                        <div class="tracker-stat-value" id="statRank">-</div>
+                      </div>
+                      <div class="tracker-stat">
+                        <div class="tracker-stat-label">ELO</div>
+                        <div class="tracker-stat-value" id="statElo">-</div>
+                      </div>
+                      <div class="tracker-stat">
+                        <div class="tracker-stat-label">Peak Rank</div>
+                        <div class="tracker-stat-value" id="statPeak">-</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="tracker-item">
-                    <div class="tracker-item-head">
-                      <div class="tracker-game">More Games</div>
-                      <div class="tracker-state">Expandable</div>
-                    </div>
-                    <div class="tracker-copy">
-                      The same tab can later support Apex, CS2, Rocket League, or any title where we can source stats reliably.
+                    <div>
+                      <div class="chip" style="margin-top: 124x;">Last 5 Matches</div>
+                      <div id= "matchHistory" style="display: gird; gap: 10px;">
+                        <div style="color: var (--text-muted); font-size: 13px;">No matches loaded yet.</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
 
+          
               <div class="panel tracker-preview">
                 <div class="tracker-preview-surface">
                   <div class="tracker-toolbar">
@@ -1347,6 +1369,69 @@
   </div>
 
   <script>
+
+    async function fetchValorantStats() {
+      const username = $("valorantUsername").value.trim();
+      const tag = $("valorantTag").value.trim();
+      const errorEl = $("trackerError");
+
+      errorEl.style.display = "none";
+      
+      if (!username || !tag) {
+        errorEl.textContent = "Please enter both username and tag.";
+        errorEl.style.display = "block";
+        return;
+      }
+      
+      $("trackerPlayerName").textContent = "Loading...";
+      $("stateRank").textContent = "-";
+      $("stateRR").textContent = "-";
+      $("stateElo").textContent = "-";
+      $("statePeak").textContent = "-";
+      $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>Loading match history...</div>";
+      
+      try {
+        const accountRest = await fetch(`/api/tracker/valorant/${encodeURIComponent(username)}/${encodeURIComponent(tag)}`);
+        const accountData = await accountRest.json();
+        if (!accountRest.ok) {
+          throw new Error(accountData.detail || "Player not found.");
+        }
+        
+      $("trackerPlayerName").textContent = `${accountData.name}#${accountData.tag}`;
+      $("stateRank").textContent = accountData.rank || "Unranked";
+      $("stateRR").textContent = `${accountData.rr} || RR`;
+      $("stateElo").textContent = accountData.elo;
+      $("statePeak").textContent = accountData.peak_rank || "N/A";
+      
+      const matchRes = await fetch(`/api/tracker/valorant/${encodeURIComponent(username)}/${encodeURIComponent(tag)}/matches`);
+      const matchData = await matchRes.json();
+      
+      if (!matchRes.ok || !matchData.matches || matchData.matches.length === 0) {
+        $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>No recent matches found.</div>";
+        return;
+      }
+
+      $("matchHistory").innerHTML = matchData.matches.map(match =>
+        <div class="tracker-item">
+          <div class="tracker-item-head">
+            <div class="tracker-game" style="font-size: 14px;">${match.game_mode} 0 ${match.rank}</div>
+            <div class="tracker-state" style="background: ${match.result === 'Win' ? 'rgba(50,200,100,0.15)' :: 'rgba(200,61,61,0.15)'}; color: ${match.result === 'Win' ? '#2ecc71' : '#c83d3d'};">${match.result}</div>
+          </div>
+          <div class="tracker-copy">
+            ${match.kills} K / ${match.deaths} D / ${match.assists} A - KD: ${match.kd} - Headshots: ${match.headshots}
+          </div>
+        </div>
+      ).join("");
+
+    } catch (error) {
+      errorEl.textContent = error.message || "Could not retrieve stats. Try again.";
+      errorEl.style.display = "block";
+      $("trackerPlayerName").textContent = "Enter a username to load stats";
+      $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>No recent matches found.</div>"
+
+    }
+  }
+
     const appState = {
       user: null,
       theme: "navy-light-blue",
