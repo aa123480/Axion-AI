@@ -1216,7 +1216,7 @@
             <div class="tracker-grid">
               <div class="panel tracker-list">
                 <div class="chip">Supported Directions</div>
-                <div class="tracker-stack"> style="margin-top: 18px;">
+                <div class="tracker-stack" style="margin-top: 18px;">
                   <div class="field-group">
                     <label class="field-label" for="valorantUsername">Valorant Username</label>
                     <input class="field" id="valorantUsername" type="text" placeholder="Enter your Valorant username">
@@ -1235,16 +1235,17 @@
                       <div>
                         <div class="chip">Valorant</div>
                         <h2 class="section-title" style="font-size: 24px; margin-top: 12px;" id="trackerPlayerName">Enter a username to load stats</h2>
-                      <div>
+                      </div>
                     </div>
+                  </div>
                     <div class="tracker-stat-grid">
                       <div class="tracker-stat">
                         <div class="tracker-stat-label">Rank</div>
-                        <div class="tracker-stat-value" id="stateRR">-</div>
+                        <div class="tracker-stat-value" id="statRank">-</div>
                       </div>
                       <div class="tracker-stat">
                         <div class="tracker-stat-label">RR</div>
-                        <div class="tracker-stat-value" id="statRank">-</div>
+                        <div class="tracker-stat-value" id="statRR">-</div>
                       </div>
                       <div class="tracker-stat">
                         <div class="tracker-stat-label">ELO</div>
@@ -1256,9 +1257,9 @@
                       </div>
                     </div>
                     <div>
-                      <div class="chip" style="margin-top: 124x;">Last 5 Matches</div>
-                      <div id= "matchHistory" style="display: gird; gap: 10px;">
-                        <div style="color: var (--text-muted); font-size: 13px;">No matches loaded yet.</div>
+                      <div class="chip" style="margin-top: 124px;">Last 5 Matches</div>
+                      <div id= "matchHistory" style="display: grid; gap: 10px;">
+                        <div style="color: var(--text-muted); font-size: 13px;">No matches loaded yet.</div>
                       </div>
                     </div>
                   </div>
@@ -1266,61 +1267,6 @@
               </div>
             </div>
           </section>
-
-          
-              <div class="panel tracker-preview">
-                <div class="tracker-preview-surface">
-                  <div class="tracker-toolbar">
-                    <div>
-                      <div class="chip">Preview Surface</div>
-                      <h2 class="section-title" style="font-size: 24px; margin-top: 12px;">Valorant Season Snapshot</h2>
-                    </div>
-                    <div class="tracker-badges">
-                      <div class="tracker-badge">Ranked</div>
-                      <div class="tracker-badge">Last 20 Matches</div>
-                      <div class="tracker-badge">Agent Split</div>
-                    </div>
-                  </div>
-
-                  <div class="tracker-stat-grid">
-                    <div class="tracker-stat">
-                      <div class="tracker-stat-label">Win Rate</div>
-                      <div class="tracker-stat-value">58%</div>
-                    </div>
-                    <div class="tracker-stat">
-                      <div class="tracker-stat-label">K/D</div>
-                      <div class="tracker-stat-value">1.19</div>
-                    </div>
-                    <div class="tracker-stat">
-                      <div class="tracker-stat-label">Headshot %</div>
-                      <div class="tracker-stat-value">24</div>
-                    </div>
-                    <div class="tracker-stat">
-                      <div class="tracker-stat-label">Main Agent</div>
-                      <div class="tracker-stat-value">Omen</div>
-                    </div>
-                  </div>
-
-                  <div class="tracker-panels">
-                    <div class="tracker-panel">
-                      <h3>What this tab can become</h3>
-                      <p>
-                        A searchable player tracker with per-game layouts, season summaries, recent form, and coaching hooks that feed directly into the AI tab.
-                      </p>
-                    </div>
-                    <div class="tracker-panel">
-                      <h3>Most useful first metrics</h3>
-                      <ul>
-                        <li>Valorant: rank, K/D, ADR or ACS, headshot rate, agent performance</li>
-                        <li>Fortnite: eliminations, win rate, placement average, recent matches</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section class="tab-content" id="settings-tab">
           <div class="settings-layout">
@@ -1384,10 +1330,10 @@
       }
       
       $("trackerPlayerName").textContent = "Loading...";
-      $("stateRank").textContent = "-";
-      $("stateRR").textContent = "-";
-      $("stateElo").textContent = "-";
-      $("statePeak").textContent = "-";
+      $("statRank").textContent = "-";
+      $("statRR").textContent = "-";
+      $("statElo").textContent = "-";
+      $("statPeak").textContent = "-";
       $("matchHistory").innerHTML = "<div style='color: var(--text-muted); font-size: 13px;'>Loading match history...</div>";
       
       try {
@@ -1397,11 +1343,11 @@
           throw new Error(accountData.detail || "Player not found.");
         }
         
-      $("trackerPlayerName").textContent = `${accountData.name}#${accountData.tag}`;
-      $("stateRank").textContent = accountData.rank || "Unranked";
-      $("stateRR").textContent = `${accountData.rr} || RR`;
-      $("stateElo").textContent = accountData.elo;
-      $("statePeak").textContent = accountData.peak_rank || "N/A";
+      $("trackerPlayerName").textContent = `${accountData.username}#${accountData.tag}`;
+      $("statRank").textContent = accountData.rank || "Unranked";
+      $("statRR").textContent = `${accountData.rr} RR`;
+      $("statElo").textContent = accountData.elo;
+      $("statPeak").textContent = accountData.peak_rank || "N/A";
       
       const matchRes = await fetch(`/api/tracker/valorant/${encodeURIComponent(username)}/${encodeURIComponent(tag)}/matches`);
       const matchData = await matchRes.json();
@@ -1411,17 +1357,17 @@
         return;
       }
 
-      $("matchHistory").innerHTML = matchData.matches.map(match =>
+      $("matchHistory").innerHTML = matchData.matches.map(match => `
         <div class="tracker-item">
           <div class="tracker-item-head">
-            <div class="tracker-game" style="font-size: 14px;">${match.game_mode} 0 ${match.rank}</div>
-            <div class="tracker-state" style="background: ${match.result === 'Win' ? 'rgba(50,200,100,0.15)' :: 'rgba(200,61,61,0.15)'}; color: ${match.result === 'Win' ? '#2ecc71' : '#c83d3d'};">${match.result}</div>
+            <div class="tracker-game" style="font-size: 14px;">${match.agent} 0 ${match.map}</div>
+            <div class="tracker-state" style="background: ${match.result === 'Win' ? 'rgba(50,200,100,0.15)' : 'rgba(200,61,61,0.15)'}; color: ${match.result === 'Win' ? '#2ecc71' : '#c83d3d'};">${match.result}</div>
           </div>
           <div class="tracker-copy">
             ${match.kills} K / ${match.deaths} D / ${match.assists} A - KD: ${match.kd} - Headshots: ${match.headshots}
           </div>
         </div>
-      ).join("");
+      `).join("");
 
     } catch (error) {
       errorEl.textContent = error.message || "Could not retrieve stats. Try again.";
