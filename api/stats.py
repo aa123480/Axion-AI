@@ -4,7 +4,7 @@
 
 from fastapi import APIRouter
 from models.schemas import Stats
-from services.gemini_client import analyze_stats
+from services.stats_service import analyze_stats
 
 router = APIRouter()
 
