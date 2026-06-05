@@ -8,10 +8,12 @@
 import os 
 import requests
 
+from mangum import Mangum # For AWS Lambda compatibility
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI() # create FastAPI instance
+handler = Mangum(app) # Create Mangum handler for AWS Lambda compatibility
 
 app.add_middleware(
     CORSMiddleware,
