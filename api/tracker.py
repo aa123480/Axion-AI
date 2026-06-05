@@ -1,20 +1,25 @@
 #----------------------------------------------------------------------------------#
 # Import Libraries 
 #----------------------------------------------------------------------------------#
-
-from fastapi import APIRouter, HTTPException
 import os
 import requests
+from fastapi import APIRouter, HTTPException
+
 
 router = APIRouter()
+
+#----------------------------------------------------------------------------------#
+# Tracker Function
+#----------------------------------------------------------------------------------#
 
 @router.get("/tracker/valorant/{username}/{tag}")
 def valorant_account(username: str, tag: str):
     try:
-        mmr_url = f"https://api.henrikdev.xyz/valorant/v2/mmr/na/{username}/{tag}"
+        mmr_url = f"https://api.henrikdev.xyz/valorant/v2/mmr/na/{username}/{tag}" 
 
         headers = {}
-        key = os.getenv("HDEV-67691d0c-f4ce-4419-bc6b-b5bff616a843")
+        key = os.getenv("HENRIK_API_KEY") # API key for valorant MMR tracking
+        
         if key:
             headers["Authorization"] = key
 
