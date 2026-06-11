@@ -4,7 +4,7 @@
 
 from typing_extensions import Literal
 
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
 #----------------------------------------------------------------------------------#
 # Models and Schemas
