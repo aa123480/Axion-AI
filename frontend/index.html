@@ -1215,7 +1215,6 @@
         <button class="tab-btn" onclick="switchTab('chatbot', this)">Game ChatBot</button>
         <button class="tab-btn" onclick="switchTab('kd', this)">K/D Generator</button>
         <button class="tab-btn" onclick="switchTab('trackers', this)">Trackers</button>
-        <button class="tab-btn" onclick="switchTab('retail', this)">Pokemon Drops</button>
         <button class="tab-btn" onclick="switchTab('settings', this)">Settings</button>
       </nav>
 
@@ -1240,11 +1239,6 @@
                   <div class="feature-kicker">Strategy</div>
                   <div class="feature-name">AI ChatBot</div>
                   <div class="feature-description">Ask focused questions about gameplay, positioning, pacing, and review.</div>
-                </div>
-                <div class="feature-card" onclick="switchTab('retail')">
-                  <div class="feature-kicker">Drops</div>
-                  <div class="feature-name">Pokemon Monitor</div>
-                  <div class="feature-description">Watch Target, Pokemon Center Canada, Walmart, and recent X updates with manual buy links.</div>
                 </div>
               </div>
               <div class="minimal-note">
@@ -1394,89 +1388,6 @@
             </div>
           </section>
 
-        <section class="tab-content" id="retail-tab">
-          <div class="retail-layout">
-            <div class="panel panel-body">
-              <div class="chip">Retail Drop Monitor</div>
-              <h2 class="section-title" style="margin-top: 14px;">Pokemon Drops</h2>
-              <p class="section-copy">
-                Track public product pages for Target, Pokemon Center Canada, and Walmart, scan recent X/Twitter posts, and jump to the retailer when a manual checkout is worth trying.
-              </p>
-            </div>
-
-            <div class="retail-grid">
-              <div class="panel retail-card">
-                <div class="chip">Watch Target</div>
-                <div class="retail-controls">
-                  <div class="field-group">
-                    <label class="field-label" for="retailProductName">Product</label>
-                    <input class="field" id="retailProductName" type="text" placeholder="Pokemon 151 Elite Trainer Box">
-                  </div>
-                  <div class="field-group">
-                    <label class="field-label" for="retailRetailer">Retailer</label>
-                    <select class="field" id="retailRetailer">
-                      <option value="target">Target</option>
-                      <option value="pokemon_center_ca">Pokemon Center Canada</option>
-                      <option value="walmart">Walmart</option>
-                    </select>
-                  </div>
-                  <div class="field-group">
-                    <label class="field-label" for="retailProductUrl">Product URL</label>
-                    <input class="field" id="retailProductUrl" type="url" placeholder="https://www.target.com/p/...">
-                  </div>
-                  <div class="field-group">
-                    <label class="field-label" for="retailKeywords">Keywords</label>
-                    <input class="field" id="retailKeywords" type="text" placeholder="151, elite trainer, pokemon">
-                  </div>
-                  <button class="primary-button" onclick="addRetailTarget()">Add Watch</button>
-                  <button class="secondary-button" onclick="checkRetailTargets()">Check Stock Signals</button>
-                  <div class="retail-safe-note">
-                    Auto-checkout is intentionally not supported. Use alerts and retailer links, then review your cart and payment manually.
-                  </div>
-                </div>
-              </div>
-
-              <div class="panel retail-results">
-                <div class="tracker-toolbar">
-                  <div>
-                    <div class="chip">Watchlist</div>
-                    <h2 class="section-title" style="font-size: 24px; margin-top: 12px;">Manual Checkout Queue</h2>
-                  </div>
-                  <button class="secondary-button" onclick="seedPokemonTargets()">Load Defaults</button>
-                </div>
-                <div class="retail-watchlist" id="retailWatchlist">
-                  <div class="retail-item">
-                    <div class="retail-title">No products watched yet.</div>
-                    <div class="retail-meta">Add product pages or load defaults to start monitoring retailer links.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="panel retail-feed">
-              <div class="tracker-toolbar">
-                <div>
-                  <div class="chip">X / Twitter</div>
-                  <h2 class="section-title" style="font-size: 24px; margin-top: 12px;">Drop Updates</h2>
-                </div>
-                <button class="secondary-button" onclick="searchTwitterDrops()">Search Recent Posts</button>
-              </div>
-              <div class="retail-controls">
-                <div class="field-group">
-                  <label class="field-label" for="twitterQuery">Search Query</label>
-                  <input class="field" id="twitterQuery" type="text" value="pokemon cards (target OR walmart OR pokemoncenter) restock -is:retweet lang:en">
-                </div>
-              </div>
-              <div class="retail-feed-list" id="twitterFeed">
-                <div class="retail-item">
-                  <div class="retail-title">Recent posts are ready when your X bearer token is configured.</div>
-                  <div class="retail-meta">Set X_BEARER_TOKEN on the backend, then search for public restock posts from the last 7 days.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section class="tab-content" id="settings-tab">
           <div class="settings-layout">
             <div class="panel settings-card">
@@ -1525,32 +1436,6 @@
 
   <script>
 
-    const retailerLabels = {
-      target: "Target",
-      pokemon_center_ca: "Pokemon Center Canada",
-      walmart: "Walmart"
-    };
-
-    const defaultPokemonTargets = [
-      {
-        retailer: "target",
-        product_name: "Pokemon Trading Card Game",
-        product_url: "https://www.target.com/s?searchTerm=pokemon+cards",
-        keywords: ["pokemon", "trading card"]
-      },
-      {
-        retailer: "pokemon_center_ca",
-        product_name: "Pokemon Center Canada TCG",
-        product_url: "https://www.pokemoncenter.com/en-ca/search/pokemon-cards",
-        keywords: ["pokemon", "cards"]
-      },
-      {
-        retailer: "walmart",
-        product_name: "Pokemon Cards at Walmart",
-        product_url: "https://www.walmart.com/search?q=pokemon+cards",
-        keywords: ["pokemon", "cards"]
-      }
-    ];
 
     async function fetchValorantStats() {
       const username = $("valorantUsername").value.trim();
@@ -1739,29 +1624,6 @@
       $("retailProductUrl").value = "";
       $("retailKeywords").value = "";
     }
-
-    function seedPokemonTargets() {
-      appState.retailTargets = defaultPokemonTargets.map((target) => ({
-        ...target,
-        status: "manual_check",
-        confidence: "low",
-        message: "Default search page loaded. Replace with a direct product URL for a stronger signal.",
-        signals: ["Default retailer search page"]
-      }));
-      persistRetailTargets();
-      renderRetailWatchlist();
-    }
-
-    function removeRetailTarget(index) {
-      appState.retailTargets.splice(index, 1);
-      persistRetailTargets();
-      renderRetailWatchlist();
-    }
-
-    async function checkRetailTargets() {
-      if (appState.retailTargets.length === 0) {
-        seedPokemonTargets();
-      }
 
       $("retailWatchlist").innerHTML = `
         <div class="retail-item">
