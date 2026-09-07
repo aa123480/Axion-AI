@@ -26,6 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/api/health")
+def health_check():
+    return {"status": "ok"}
+
 #----------------------------------------------------------------------------------#
 # Recall files for Gemini client, data models and routes
 #----------------------------------------------------------------------------------#
@@ -38,7 +42,7 @@ from api.chat import router as chat_router
 from api.stats import router as stats_router
 from api.tracker import router as tracker_router
 
-app.include_router(chat_router)
-app.include_router(stats_router)
-app.include_router(tracker_router)
+app.include_router(chat_router, prefix="/api")
+app.include_router(stats_router, prefix="/api")
+app.include_router(tracker_router, prefix="/api")
 
